@@ -1,0 +1,3 @@
+src/utils/zeus/**/*
+umami.d.ts
+lint-staged.config.mjs
