@@ -2,6 +2,7 @@ import type { AppProps } from "next/app";
 import { Space_Grotesk } from "next/font/google";
 import Head from "next/head";
 
+import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import "@/styles/globals.css";
 
@@ -18,6 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <main className={spaceGrotesk.className}>
         <Component {...pageProps} />
+        <Toaster />
       </main>
     </ThemeProvider>
   );
