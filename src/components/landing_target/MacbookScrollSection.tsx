@@ -4,12 +4,12 @@ import Link from "next/link";
  
 const MacbookScrollSection = () =>  {
   return (
-    <div className="overflow-hidden dark:bg-[#0B0B0F] bg-white w-full">
+    <div className="overflow-hidden dark:bg-[#0B0B0F]  w-full">
       <MacbookScroll
         title={
-          <span>
-            This Macbook is built with Tailwindcss. <br /> No kidding.
-          </span>
+          <h2 className="text-primary-foreground">
+            Eventownik kozak
+            </h2>
         }
         badge={
           <Link href="https://peerlist.io/manuarora">

@@ -8,9 +8,9 @@ import Button from "../ui_target/button";
 const Hero = () => {
   return (
     <section >
-      <div className="mx-12 flex justify-between items-center mt-10 ">
+      <div className="p-12 pb-40 flex justify-between items-center mt-24 ">
         <div>
-          <h1 className="text-7xl text-primary-foreground mb-5 h-3/4">
+          <h1 className="text-7xl text-primary-foreground mb-8 h-3/4 text">
             Eventownik - zróbmy razem
             <br />
             wydarzenie!

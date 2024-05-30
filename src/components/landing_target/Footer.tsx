@@ -1,0 +1,47 @@
+import Image from "next/image";
+import React from "react";
+import logo_solvro_normal from "../../assets/logo_solvro_normal.png";
+import pwr_logo from "../../assets/pwr_logo.svg";
+import w_4 from "../../assets/w4_logo.svg";
+import linkedin from "../../assets/linkedin.svg";
+import facebook from "../../assets/facebook.svg";
+import github from "../../assets/github.svg";
+const Footer = () => {
+  return (
+    <footer className="bg-muted">
+      <div className="flex justify-between items-center px-12 py-20">
+        <div className="flex flex-col ">
+          <Image src={logo_solvro_normal} alt="Solvro logo" width={168} height={36} className="mb-2" />
+          <p>kn.solvro@pwr.edu.pl</p>
+        </div>
+
+        <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
+          <h3 className="uppercase mb-2">Obserwuj nas</h3>
+          <button className="rounded-full bg-primary p-2 mx-2"><Image alt="Github" src={github}></Image></button>
+          <button className="rounded-full bg-primary p-2 mx-2"><Image alt="Facebook" src={facebook}></Image></button>
+          <button className="rounded-full bg-primary p-2 mx-2"><Image alt="Linkedin" src={linkedin}></Image></button>
+        </div>
+        <div className="flex flex-row">
+        <Image src={w_4} alt="W4N logo" className="svg-black" />
+          <Image src={pwr_logo} alt="Pwr logo" className="ml-5 svg-black" />
+        </div>
+      </div>
+      <div className=" py-6 text-center bg-accent text-primary-foreground">
+        <h3>
+          Made with ❤️ by{" "}
+          <a
+            rel="noreferrer noopener"
+            target="_blank"
+            href="https://solvro.pwr.edu.pl"
+            className=" hover:border-b-2"
+          >
+            Solvro
+          </a>{" "}
+          © {new Date().getFullYear()}
+        </h3>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
