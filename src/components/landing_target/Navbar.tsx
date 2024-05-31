@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 import logo_eventownik from "../../assets/logo_eventownik.png";
+import { Button } from "../ui_target/button";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,6 +29,7 @@ const Navbar = () => {
         <Link href="/home" className="ml-8">
           Home
         </Link>
+        
         <Link href="/about" className="ml-8">
           O nas
         </Link>
@@ -37,9 +39,7 @@ const Navbar = () => {
         <Link href="/contact" className="ml-8">
           Kontakt
         </Link>
-        <button className="ml-8 rounded-md border border-primary-foreground p-3">
-          Utwórz wydarzenie
-        </button>
+        <Button variant="outline" className={'ml-8 rounded-md border bg-transparent border-primary-foreground px-3 py-2'}>Utwórz wydarzenie</Button>
       </div>
     </header>
   );

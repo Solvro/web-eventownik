@@ -1,4 +1,4 @@
-# ![Eventownik](https://github.com/Solvro/web-eventownik/blob/main/src/assets/eventownik.png?raw=true)  
+# ![Eventownik](https://github.com/Solvro/web-eventownik/blob/main/src/assets/eventownik_readme.png?raw=true)  
 
 #### Aplikacja webowa do zarządzania stanem uzupełnienia pokoi oraz stolików na balu inżyniera.
 
@@ -12,9 +12,9 @@ The "Eventownik" project is a web application designed to manage room and table 
 
 ## Technologies
 In developing this application, we used the following technologies:
-* [![Next][Next.js]][Next-url]
-* [![Supabase][Supabase]][Supabase-url]
-* [![Tailwindcss][Tailwindcss]][Tailwindcss-url]
+* [Next](https://github.com/Solvro/web-eventownik/blob/main/src/assets/next_logo.png?raw=true)
+* [Supabase](https://github.com/Solvro/web-eventownik/blob/main/src/assets/supabase_logo.png?raw=true)
+* [Tailwindcss](https://github.com/Solvro/web-eventownik/blob/main/src/assets/tailwind_logo.png?raw=true)
 
 
 ## Links

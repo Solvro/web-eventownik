@@ -6,6 +6,8 @@ import w_4 from "../../assets/w4_logo.svg";
 import linkedin from "../../assets/linkedin.svg";
 import facebook from "../../assets/facebook.svg";
 import github from "../../assets/github.svg";
+import { Button } from "@/components/ui_target/button"
+
 const Footer = () => {
   return (
     <footer className="bg-muted">
@@ -17,9 +19,9 @@ const Footer = () => {
 
         <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
           <h3 className="uppercase mb-2">Obserwuj nas</h3>
-          <button className="rounded-full bg-primary p-2 mx-2"><Image alt="Github" src={github}></Image></button>
-          <button className="rounded-full bg-primary p-2 mx-2"><Image alt="Facebook" src={facebook}></Image></button>
-          <button className="rounded-full bg-primary p-2 mx-2"><Image alt="Linkedin" src={linkedin}></Image></button>
+          <Button variant="secondary" className={'rounded-full bg-primary p-2 mx-2 hover:bg-accent'}  ><Image alt="Github" src={github}></Image></Button >
+          <Button  variant="secondary" className={'rounded-full bg-primary p-2 mx-2 hover:bg-accent'} ><Image alt="Facebook" src={facebook}></Image></Button>
+          <Button  variant="secondary" className={'rounded-full bg-primary p-2 mx-2 hover:bg-accent'} ><Image alt="Linkedin" src={linkedin}></Image></Button>
         </div>
         <div className="flex flex-row">
         <Image src={w_4} alt="W4N logo" className="svg-black" />

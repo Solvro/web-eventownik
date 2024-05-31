@@ -3,7 +3,7 @@ import React from "react";
 import macbook_mockup from "../../assets/macbook_mockup.png";
 import cube from "../../assets/cube.png";
 import sphere from "../../assets/sphere.png";
-import Button from "../ui_target/button";
+import { Button } from "@/components/ui_target/button"
 
 const Hero = () => {
   return (
@@ -15,7 +15,7 @@ const Hero = () => {
             <br />
             wydarzenie!
           </h1>
-          <Button buttonText={"Utwórz wydarzenie"} href={"/home"} />
+          <Button variant="secondary" className={'bg-secondary py-8 px-8 rounded-md font-bold text-lg'}>Utwórz wydarzenie</Button>
         </div>
        <div className="w-100 h-100 mr-80 relative">
         <Image alt="Laptop"  src={macbook_mockup} />

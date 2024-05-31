@@ -10,12 +10,16 @@ const AboutApp = () => {
       <div className="px-12 py-40 flex ">
         <div className="text-ternary-foreground w-1/2 ">
           <h3 className="uppercase font-bold">O aplikacji</h3>
-          <h2 className="text-4xl font-bold">
-            Poznaj Eventownika - platformę stworzoną z  myślą o samorządach
-            studenckich, kołach  naukowych i innych organizacjach studenckich, 
-            która pomoże Ci w każdym aspekcie planowania i realizacji wydarzeń.
-          </h2>
-          <h4 className="my-3">Dlaczego <span className="font-bold">Eventownik?</span></h4>
+          <h2 className="text-4xl font-bold mb-5">Poznaj Eventownik</h2>
+          <h4 className="font-bold">
+            To platforma stworzoną z myślą o samorządach studenckich, kołach
+            naukowych i innych organizacjach
+            <br /> studenckich, która pomoże Ci w każdym aspekcie planowania i
+            realizacji wydarzeń.
+          </h4>
+          <h4 className="my-3">
+            Dlaczego <span className="font-bold">Eventownik?</span>
+          </h4>
           <ul>
             <li className="flex items-center my-3">
               <Image src={symbol} alt="Symbol" width={15} height={15} />
@@ -40,7 +44,7 @@ const AboutApp = () => {
           </ul>
         </div>
         <div className="w-1/2 ml-16 ">
-        <Image src={vision} alt="Vision"/>
+          <Image src={vision} alt="Vision" />
         </div>
       </div>
     </section>

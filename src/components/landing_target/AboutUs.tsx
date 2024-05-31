@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import solvro_circle_logo from "../../assets/solvro_circle_logo.png";
-import Button from "../ui_target/button";
+import { Button } from "@/components/ui_target/button"
 
 const AboutUs = () => {
   return (
@@ -24,7 +24,7 @@ const AboutUs = () => {
             jak dynamiczny software house, ale bez sztywnych <br/> garniturów i bez
             korpo logiki - u nas liczy się pasja do kodowania i kreatywność!{" "}
           </p>
-          <Button buttonText={"Poznaj nas"} href={"/home"} />
+          <Button variant="secondary" className={'py-8 px-8 rounded-md font-bold text-lg'}>Poznaj nas</Button>
           </div>
         </div>
       </div>
