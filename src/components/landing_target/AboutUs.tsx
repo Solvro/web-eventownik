@@ -6,14 +6,16 @@ import { Button } from "@/components/ui_target/button"
 const AboutUs = () => {
   return (
     <section>
-      <div className="flex px-12 ">
+      <div className="flex flex-col xl:flex-row px-12  xl:my-0 ">
        
-          <Image src={solvro_circle_logo} alt="Solvro logo"/>
+      <div className="xl:w-1/2 flex justify-center xl:justify-start"> 
+          <Image src={solvro_circle_logo} alt="Solvro logo" className="order-1 lg:order-1 mb-10 xl:mb-0"/>
+        </div>
   
-        <div className="text-primary-foreground flex items-center ml-10 ">
+        <div className="text-primary-foreground flex items-center xl:ml-10 order-2 xl:order-2 mb-10 xl:mb-0 xl:my-0">
             <div>
-          <h3 className="uppercase font-bold">O nas</h3>
-          <h2 className="text-4xl font-bold mb-10">
+          <h3 className="uppercase font-bold text-xs md:text-xl">O nas</h3>
+          <h2 className="font-bold mb-10 text-2xl lg:text-4xl">
             Solvro to przestrzeń, w której spełniają się pomysły.
           </h2>
           <p className="mb-8">

@@ -11,14 +11,14 @@ import { Button } from "@/components/ui_target/button"
 const Footer = () => {
   return (
     <footer className="bg-muted">
-      <div className="flex justify-between items-center px-12 py-20">
-        <div className="flex flex-col ">
+      <div className="flex flex-col md:flex-row justify-between md:justify-between items-center px-12 py-20">
+        <div className="flex flex-col mb-8 md:mb-0">
           <Image src={logo_solvro_normal} alt="Solvro logo" width={168} height={36} className="mb-2" />
           <p>kn.solvro@pwr.edu.pl</p>
         </div>
 
-        <div className="absolute left-1/2 transform -translate-x-1/2 text-center">
-          <h3 className="uppercase mb-2">Obserwuj nas</h3>
+        <div className="relative md:absolute md:left-1/2 md:transform md:-translate-x-1/2 text-center mb-8 md:mb-0">
+          <h3 className="uppercase mb-2 ">Obserwuj nas</h3>
           <Button variant="secondary" className={'rounded-full bg-primary p-2 mx-2 hover:bg-accent'}  ><Image alt="Github" src={github}></Image></Button >
           <Button  variant="secondary" className={'rounded-full bg-primary p-2 mx-2 hover:bg-accent'} ><Image alt="Facebook" src={facebook}></Image></Button>
           <Button  variant="secondary" className={'rounded-full bg-primary p-2 mx-2 hover:bg-accent'} ><Image alt="Linkedin" src={linkedin}></Image></Button>
