@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
-import { Button } from "../ui_target/button";
-import Toggle from "../ui_target/toggle";
+import { Button } from "../ui/button";
+import Toggle from "../ui/toggle";
 
 interface MobileMenuProps {
   onClose: () => void;

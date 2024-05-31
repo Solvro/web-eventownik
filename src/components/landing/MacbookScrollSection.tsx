@@ -1,5 +1,5 @@
 import React from "react";
-import { MacbookScroll } from "../ui_target/macbook-scroll";
+import { MacbookScroll } from "../ui/macbook-scroll";
 import Link from "next/link";
  
 const MacbookScrollSection = () =>  {

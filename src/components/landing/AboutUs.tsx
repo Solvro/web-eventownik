@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import solvro_circle_logo from "../../assets/solvro_circle_logo.png";
-import { Button } from "@/components/ui_target/button"
+import { Button } from "@/components/ui/button"
 
 const AboutUs = () => {
   return (
