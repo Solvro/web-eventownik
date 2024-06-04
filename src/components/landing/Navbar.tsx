@@ -1,109 +1,73 @@
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
-import { Menu } from "lucide-react";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useState } from "react";
+import logo_eventownik from "../../assets/logo_eventownik.png";
+import { Button } from "../ui/button";
+import Toggle from "../ui/toggle";
+import MobileMenu from "./MobileMenu";
 
-import Logo from "@/assets/logo.png";
-import { buttonVariants } from "@/components/ui/button";
-import { ModeToggle } from "@/components/ui/mode-toggle";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-import { LogoIcon } from "./Icons";
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 0);
+    };
+    handleScroll(); 
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
-interface RouteProps {
-  href: string;
-  label: string;
-}
+  useEffect(() => {
+    const handleScrolling = () => {
+      if (isMobileMenuOpen) {
+        document.documentElement.style.overflow = "hidden";
+      } else {
+        document.documentElement.style.overflow = "auto";
+      }
+    };
+    handleScrolling();
+  }, [isMobileMenuOpen]);
 
-const routeList: RouteProps[] = [
-  {
-    href: "#features",
-    label: "Funkcje",
-  },
-  {
-    href: "#faq",
-    label: "FAQ",
-  },
-];
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
-export const Navbar = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <header className="sticky border-b-[1px] top-0 z-40 w-full bg-white dark:border-b-slate-700 dark:bg-background">
-      <NavigationMenu className="mx-auto">
-        <NavigationMenuList className="container h-14 px-4 w-screen flex justify-between ">
-          <NavigationMenuItem className="font-bold flex">
-            <a
-              rel="noreferrer noopener"
-              href="/"
-              className="ml-2 font-bold text-xl flex"
-            >
-              Eventownik
-            </a>
-          </NavigationMenuItem>
+    <header className={`sticky top-0 w-full h-24 flex justify-between items-center z-10 transition-colors duration-300 ${isScrolled ? 'bg-gray-900 bg-opacity-75' : 'bg-transparent'}`}>
+      <Link href="/home" className="ml-6">
+        <Image alt="Logo eventownik" src={logo_eventownik} />
+      </Link>
 
-          <span className="flex md:hidden">
-            <ModeToggle />
-
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger className="px-2">
-                <Menu
-                  className="flex md:hidden h-5 w-5"
-                  onClick={() => setIsOpen(true)}
-                />
-              </SheetTrigger>
-
-              <SheetContent side={"left"}>
-                <SheetHeader>
-                  <SheetTitle className="font-bold text-xl">
-                    Eventownik
-                  </SheetTitle>
-                </SheetHeader>
-              </SheetContent>
-            </Sheet>
-          </span>
-
-          <nav className="hidden md:flex gap-2">
-            {routeList.map((route: RouteProps, i) => (
-              <a
-                rel="noreferrer noopener"
-                href={route.href}
-                key={i}
-                className={`text-[17px] ${buttonVariants({
-                  variant: "ghost",
-                })}`}
-              >
-                {route.label}
-              </a>
-            ))}
-          </nav>
-
-          <div className="hidden md:flex gap-2">
-            <a
-              rel="noreferrer noopener"
-              href="https://github.com/Solvro/eventownik"
-              target="_blank"
-              className={`border ${buttonVariants({ variant: "secondary" })}`}
-            >
-              <GitHubLogoIcon className="mr-2 w-5 h-5" />
-              Github
-            </a>
-
-            <ModeToggle />
-          </div>
-        </NavigationMenuList>
-      </NavigationMenu>
+      <div className="hidden lg:flex lg:items-center lg:mr-12 text-primary-foreground  lg:text-base">
+        <Link href="/home" className="ml-8 ">
+          Home
+        </Link>
+        <Link href="/about" className="ml-8">
+          O nas
+        </Link>
+        <Link href="/about-app" className="ml-8">
+          O aplikacji
+        </Link>
+        <Link href="/contact" className="ml-8">
+          Kontakt
+        </Link>
+        <Button variant="outline" className="ml-8 rounded-md border bg-transparent border-primary-foreground px-3 py-2">
+          Utwórz wydarzenie
+        </Button>
+      </div>
+      {!isMobileMenuOpen &&
+      <div className="lg:hidden mr-6 ">
+        <Toggle isOpen={isMobileMenuOpen} toggle={toggleMobileMenu} />
+      </div>
+}
+      {isMobileMenuOpen && <MobileMenu onClose={toggleMobileMenu} isOpen={isMobileMenuOpen} />}
     </header>
   );
 };
+
+export default Navbar;

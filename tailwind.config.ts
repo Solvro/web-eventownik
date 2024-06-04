@@ -1,6 +1,10 @@
-import type { Config } from "tailwindcss";
+import { Config } from "tailwindcss";
+import { PluginCreator } from 'postcss'; 
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
 
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: ["./src/**/*.{ts,tsx}"],
   prefix: "",
@@ -17,27 +21,31 @@ const config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        background: "#152959",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#152959",
+          foreground: "#FFFFFF",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#A1C9FB",
+          foreground: "#142A56",
+        },
+        ternary: {
+          DEFAULT: "#FFFFFF",
+          foreground: "#152959",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "#D9E8FF",
+          foreground: "#152959",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "#274276",
+          foreground: "#FFFFFF",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -69,7 +77,30 @@ const config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+  plugins: [
+    addVariablesForColors,
+    require("tailwindcss-animate"),
+    function ({ addUtilities }: { addUtilities: PluginCreator<{}> }) {
+      const newUtilities = {
+        ".svg-black": {
+          filter: "invert(0) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)",
+        },
+      };
+
+      addUtilities(newUtilities);
+    },
+  ],
+};
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+
+  addBase({
+    ":root": newVars,
+  });
+}
 
 export default config;
