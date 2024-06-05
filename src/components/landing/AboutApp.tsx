@@ -43,7 +43,7 @@ const AboutApp = () => {
           </ul>
         </div>
         <div className="w-full md:w-1/2 md:ml-16 ">
-          <Image src={vision} alt="Vision" />
+          {/* <Image src={vision} alt="Vision" /> */}
         </div>
       </div>
     </section>
