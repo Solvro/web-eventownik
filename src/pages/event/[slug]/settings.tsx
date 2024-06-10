@@ -1,16 +1,7 @@
 import { CalendarIcon, GearIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
-import {
-  Grip,
-  Home,
-  LineChart,
-  Menu,
-  Package,
-  Package2,
-  ShoppingCart,
-  Users,
-} from "lucide-react";
+import { Grip, Home, LineChart, Menu, Package2 } from "lucide-react";
 import type { InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import type { GetServerSidePropsContext } from "nextjs-routes";
@@ -21,13 +12,6 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { DateTimePicker } from "@/components/ui/datetime-picker-demo";
 import {
   Form,
@@ -53,10 +37,14 @@ import { useEvent } from "@/lib/useEvent";
 import { useZodForm } from "@/lib/useZodForm";
 import { cn } from "@/lib/utils";
 
-export default function Dashboard(
-  props: InferGetServerSidePropsType<typeof getServerSideProps>,
-) {
-  const event = useEvent(props.ownersSlug, props);
+export default function Dashboard({
+  ownersSlug,
+  ...rest
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const event = useEvent(ownersSlug, {
+    ...rest,
+    ownersSlug,
+  });
 
   const form = useZodForm({
     schema: z.object({
@@ -68,9 +56,10 @@ export default function Dashboard(
     reValidateMode: "onChange",
     defaultValues: {
       name: event.data?.name,
-      eventDate: event.data?.eventDate
-        ? new Date(event.data?.eventDate)
-        : undefined,
+      eventDate:
+        typeof event.data?.eventDate === "string"
+          ? new Date(event.data.eventDate)
+          : undefined,
       description: event.data?.description ?? "",
       organizerName: event.data?.organizerName,
     },
@@ -86,20 +75,21 @@ export default function Dashboard(
   useEffect(() => {
     form.reset({
       name: event.data?.name,
-      eventDate: event.data?.eventDate
-        ? new Date(event.data?.eventDate)
-        : undefined,
+      eventDate:
+        typeof event.data?.eventDate === "string"
+          ? new Date(event.data.eventDate)
+          : undefined,
       description: event.data?.description ?? "",
       organizerName: event.data?.organizerName,
     });
-  }, [event.data]);
+  }, [event.data, form]);
 
   const updateEvent = useMutation({
     mutationFn: async (data: TablesUpdate<"events">) => {
       const updatedEvent = await supabase
         .from("events")
         .update(data)
-        .eq("ownersSlug", props.ownersSlug)
+        .eq("ownersSlug", ownersSlug)
         .single()
         .throwOnError();
 
@@ -119,7 +109,7 @@ export default function Dashboard(
           </div>
           <div className="flex-1 border-r">
             <nav className="grid items-start  px-8 text-sm font-medium">
-              <h2 className="text-lg py-4 font-bold">Zapisy na zajęcia</h2>
+              <h2 className="py-4 text-lg font-bold">Zapisy na zajęcia</h2>
               <Link
                 href={{
                   hash: "#",
@@ -145,7 +135,7 @@ export default function Dashboard(
       <div className="flex flex-col">
         <header className="flex h-14 items-center gap-4 border-b px-4 lg:h-[60px] lg:px-6">
           <Sheet>
-            <SheetTrigger asChild>
+            <SheetTrigger asChild={true}>
               <Button
                 variant="outline"
                 size="icon"
@@ -189,11 +179,11 @@ export default function Dashboard(
             </SheetContent>
           </Sheet>
         </header>
-        <main className="flex flex-1 max-w-screen-md flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className="flex max-w-screen-md flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
           <Tabs
             defaultValue="settings"
             value={tab}
-            onValueChange={(v) => setTab(v)}
+            onValueChange={(v) => void setTab(v)}
           >
             <TabsList>
               <TabsTrigger value="settings">Ogólne</TabsTrigger>
@@ -204,21 +194,26 @@ export default function Dashboard(
             <TabsContent value="settings">
               <Form {...form}>
                 <form
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
                   onSubmit={form.handleSubmit(async (data) => {
                     await updateEvent
                       .mutateAsync({
                         ...data,
                         eventDate: data.eventDate.toISOString(),
                       })
-                      .then((t) => {
+                      .then(() => {
                         toast("Zapisano zmiany");
                       })
                       .catch((err) => {
-                        toast(`Coś poszło nie tak, ${err.message}`);
+                        if (err instanceof Error) {
+                          toast(`Coś poszło nie tak, ${err.message}`);
+                        } else {
+                          toast("Coś poszło nie tak, spróbuj ponownie");
+                        }
                       });
                   })}
                 >
-                  <div className="flex flex-col max-w-screen-md gap-5 mt-10 w-full">
+                  <div className="mt-10 flex w-full max-w-screen-md flex-col gap-5">
                     <FormField
                       control={form.control}
                       name="name"
@@ -251,22 +246,17 @@ export default function Dashboard(
                             <FormLabel htmlFor="date">Data</FormLabel>
                             <FormControl>
                               <Popover>
-                                <PopoverTrigger asChild>
+                                <PopoverTrigger asChild={true}>
                                   <Button
-                                    variant={"outline"}
+                                    variant="outline"
                                     id="date"
                                     disabled={field.disabled}
                                     className={cn(
                                       "justify-start text-left font-normal",
-                                      !field.value && "text-muted-foreground",
                                     )}
                                   >
                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {field.value ? (
-                                      format(field.value, "PPP")
-                                    ) : (
-                                      <span>Pick a date</span>
-                                    )}
+                                    {format(field.value, "PPP")}
                                   </Button>
                                 </PopoverTrigger>
                                 <PopoverContent
@@ -278,7 +268,7 @@ export default function Dashboard(
                                     mode="single"
                                     selected={field.value}
                                     onSelect={field.onChange}
-                                    initialFocus
+                                    initialFocus={true}
                                   />
                                 </PopoverContent>
                               </Popover>
@@ -347,22 +337,25 @@ export default function Dashboard(
               </Form>
             </TabsContent>
             <TabsContent value="sharing">
-              <div className="flex flex-col max-w-screen-md gap-5 mt-10 w-full">
+              <div className="mt-10 flex w-full max-w-screen-md flex-col gap-5">
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                   <Label htmlFor="email">Link do wydarzenia</Label>
                   <div className="flex w-full max-w-sm items-center space-x-2">
                     <Input
                       type="url"
-                      disabled
+                      disabled={true}
                       className="cursor-copy"
                       value={`https://eventownik.solvro.pl/event/${event.data?.usersSlug}`}
                     />
                     <Button
                       onClick={() => {
-                        navigator.clipboard.writeText(
-                          `https://eventownik.solvro.pl/event/${event.data?.usersSlug}`,
-                        );
-                        toast("Link skopiowany do schowka");
+                        void navigator.clipboard
+                          .writeText(
+                            `https://eventownik.solvro.pl/event/${event.data?.usersSlug}`,
+                          )
+                          .then(() => {
+                            toast("Link skopiowany do schowka");
+                          });
                       }}
                     >
                       Skopiuj
@@ -404,7 +397,7 @@ export default function Dashboard(
               </div>
             </TabsContent>
             <TabsContent value="customisation">
-              <div className="flex flex-col max-w-screen-md gap-5 mt-10 w-full">
+              <div className="mt-10 flex w-full max-w-screen-md flex-col gap-5">
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                   <Label htmlFor="default-color">Kolor domyślny</Label>
                   <Input id="default-color" type="color" />

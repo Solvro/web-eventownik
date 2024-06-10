@@ -7,6 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "knip": "knip",
+    "typecheck": "tsc",
     "generate": "npx supabase gen types typescript --project-id \"kmiyeqcynkremenbffvl\" --schema public > ./src/lib/types.ts "
   },
   "dependencies": {
@@ -46,6 +51,7 @@
     "react-hook-form": "^7.51.5",
     "react-stately": "^3.31.1",
     "recharts": "^2.12.7",
+    "sharp": "^0.33.4",
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
@@ -56,16 +62,18 @@
   "devDependencies": {
     "@alergeek-ventures/eslint-config": "^9.0.35",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@types/node": "^20",
+    "@types/node": "^20.14.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^9.0.8",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
+    "knip": "^5.18.2",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
+    "supabase": "^1.172.2",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5.4.5"
   }
 }

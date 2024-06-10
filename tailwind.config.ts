@@ -1,5 +1,5 @@
-import { PluginCreator } from "postcss";
-import { Config } from "tailwindcss";
+import type { PluginCreator } from "postcss";
+import type { Config } from "tailwindcss";
 
 const {
   default: flattenColorPalette,
@@ -81,7 +81,7 @@ const config: Config = {
   plugins: [
     addVariablesForColors,
     require("tailwindcss-animate"),
-    function ({ addUtilities }: { addUtilities: PluginCreator<{}> }) {
+    function ({ addUtilities }: { addUtilities: PluginCreator<object> }) {
       const newUtilities = {
         ".svg-black": {
           filter:
@@ -94,9 +94,15 @@ const config: Config = {
   ],
 };
 
-function addVariablesForColors({ addBase, theme }: any) {
-  let allColors = flattenColorPalette(theme("colors"));
-  let newVars = Object.fromEntries(
+function addVariablesForColors({
+  addBase,
+  theme,
+}: {
+  addBase: PluginCreator<object>;
+  theme: (path: string) => any;
+}) {
+  const allColors = flattenColorPalette(theme("colors"));
+  const newVars = Object.fromEntries(
     Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
   );
 

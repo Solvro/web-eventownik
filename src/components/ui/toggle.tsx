@@ -1,29 +1,31 @@
-import React from "react";
+import type React from "react";
 
 interface ToggleProps {
   isOpen: boolean;
   toggle: () => void;
-  className?: string; 
+  className?: string;
 }
 
-const Toggle: React.FC<ToggleProps> = ({ isOpen, toggle, className }) => {
+export const Toggle: React.FC<ToggleProps> = ({
+  isOpen,
+  toggle,
+  className,
+}) => {
   return (
     <button
       onClick={toggle}
-      className={` flex flex-col p-4 gap-1 justify-center z-20 ${className}`}
+      className={` z-20 flex flex-col justify-center gap-1 p-4 ${className}`}
     >
       <span
-        className={`w-6 h-0.5 rounded-md bg-primary-foreground transition ${
-          isOpen ? 'rotate-45 translate-y-[50%]' : ''
+        className={`h-0.5 w-6 rounded-md bg-primary-foreground transition ${
+          isOpen ? "translate-y-[50%] rotate-45" : ""
         }`}
-      ></span>
+      />
       <span
-        className={`w-6 h-0.5 rounded-md bg-primary-foreground transition ${
-          isOpen ? '-rotate-45 -translate-y-[260%]' : ''
+        className={`h-0.5 w-6 rounded-md bg-primary-foreground transition ${
+          isOpen ? "-translate-y-[260%] -rotate-45" : ""
         }`}
-      ></span>
+      />
     </button>
   );
-}
-
-export default Toggle;
+};

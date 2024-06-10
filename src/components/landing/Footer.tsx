@@ -1,21 +1,20 @@
 import Image from "next/image";
 import React from "react";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import facebook from "@/assets/facebook.svg";
+import github from "@/assets/github.svg";
+import linkedin from "@/assets/linkedin.svg";
+import logo_solvro_normal from "@/assets/logo_solvro_normal.png";
+import pwr_logo from "@/assets/pwr_logo.svg";
+import w_4 from "@/assets/w4_logo.svg";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-import facebook from "../../assets/facebook.svg";
-import github from "../../assets/github.svg";
-import linkedin from "../../assets/linkedin.svg";
-import logo_solvro_normal from "../../assets/logo_solvro_normal.png";
-import pwr_logo from "../../assets/pwr_logo.svg";
-import w_4 from "../../assets/w4_logo.svg";
-
-const Footer = () => {
+export const Footer = () => {
   return (
     <footer className="bg-[#D9E8FF]">
-      <div className="flex flex-col md:flex-row justify-between md:justify-between items-center px-12 py-20">
-        <div className="flex flex-col mb-8 md:mb-0">
+      <div className="flex flex-col items-center justify-between px-12 py-20 md:flex-row md:justify-between">
+        <div className="mb-8 flex flex-col md:mb-0">
           <Image
             src={logo_solvro_normal}
             alt="Solvro logo"
@@ -26,34 +25,34 @@ const Footer = () => {
           <a href="mailto:kn.solvro@pwr.edu.pl">kn.solvro@pwr.edu.pl</a>
         </div>
 
-        <div className="relative md:absolute md:left-1/2 md:transform md:-translate-x-1/2 text-center mb-8 md:mb-0">
-          <h3 className="uppercase mb-2">Obserwuj nas</h3>
+        <div className="relative mb-8 text-center md:absolute md:left-1/2 md:mb-0 md:-translate-x-1/2 md:transform">
+          <h3 className="mb-2 uppercase">Obserwuj nas</h3>
           <a
             href="https://github.com/Solvro/web-eventownik"
             className={cn(
               buttonVariants({ variant: "secondary" }),
-              "rounded-full bg-[#152959] p-2 mx-2 cursor-pointer hover:bg-[#274276]",
+              "mx-2 cursor-pointer rounded-full bg-[#152959] p-2 hover:bg-[#274276]",
             )}
           >
-            <Image alt="Github" src={github}></Image>
+            <Image alt="Github" src={github} />
           </a>
           <a
             href="https://www.facebook.com/knsolvro"
             className={cn(
               buttonVariants({ variant: "secondary" }),
-              "rounded-full bg-[#152959] p-2 mx-2 cursor-pointer hover:bg-[#274276]",
+              "mx-2 cursor-pointer rounded-full bg-[#152959] p-2 hover:bg-[#274276]",
             )}
           >
-            <Image alt="Facebook" src={facebook}></Image>
+            <Image alt="Facebook" src={facebook} />
           </a>
           <a
             href="https://www.linkedin.com/company/knsolvro/"
             className={cn(
               buttonVariants({ variant: "secondary" }),
-              "rounded-full bg-[#152959] p-2 mx-2 cursor-pointer hover:bg-[#274276]",
+              "mx-2 cursor-pointer rounded-full bg-[#152959] p-2 hover:bg-[#274276]",
             )}
           >
-            <Image alt="Linkedin" src={linkedin}></Image>
+            <Image alt="Linkedin" src={linkedin} />
           </a>
         </div>
         <div className="flex flex-row">
@@ -61,7 +60,7 @@ const Footer = () => {
           <Image src={pwr_logo} alt="Pwr logo" className="ml-5 svg-black" />
         </div>
       </div>
-      <div className=" py-6 text-center bg-[#274276] text-primary-foreground">
+      <div className=" bg-[#274276] py-6 text-center text-primary-foreground">
         <h3>
           Made with ❤️ by{" "}
           <a
@@ -78,5 +77,3 @@ const Footer = () => {
     </footer>
   );
 };
-
-export default Footer;

@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-import logo_eventownik from "../../assets/logo_eventownik.png";
-import { Button } from "../ui/button";
-import Toggle from "../ui/toggle";
-import MobileMenu from "./MobileMenu";
+import logo_eventownik from "@/assets/logo_eventownik.png";
 
-const Navbar = () => {
+import { Button } from "../ui/button";
+import { Toggle } from "../ui/toggle";
+import { MobileMenu } from "./MobileMenu";
+
+export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -40,13 +41,13 @@ const Navbar = () => {
 
   return (
     <header
-      className={`sticky top-0 w-full h-24 flex justify-between items-center z-10 transition-colors duration-300 ${isScrolled ? "bg-gray-900 bg-opacity-75" : "bg-transparent"}`}
+      className={`sticky top-0 z-10 flex h-24 w-full items-center justify-between transition-colors duration-300 ${isScrolled ? "bg-gray-900 bg-opacity-75" : "bg-transparent"}`}
     >
       <Link href="/" className="ml-6">
         <Image alt="Logo eventownik" src={logo_eventownik} />
       </Link>
 
-      <div className="hidden lg:flex lg:items-center lg:mr-12 text-primary-foreground  lg:text-base">
+      <div className="hidden text-primary-foreground lg:mr-12 lg:flex lg:items-center  lg:text-base">
         <Link href="/" className="ml-8 ">
           Home
         </Link>
@@ -61,21 +62,19 @@ const Navbar = () => {
         </Link>
         <Button
           variant="outline"
-          className="ml-8 rounded-md border bg-transparent border-primary-foreground px-3 py-2"
+          className="ml-8 rounded-md border border-primary-foreground bg-transparent px-3 py-2"
         >
           Utwórz wydarzenie
         </Button>
       </div>
       {!isMobileMenuOpen && (
-        <div className="lg:hidden mr-6 ">
+        <div className="mr-6 lg:hidden ">
           <Toggle isOpen={isMobileMenuOpen} toggle={toggleMobileMenu} />
         </div>
       )}
-      {isMobileMenuOpen && (
+      {isMobileMenuOpen ? (
         <MobileMenu onClose={toggleMobileMenu} isOpen={isMobileMenuOpen} />
-      )}
+      ) : null}
     </header>
   );
 };
-
-export default Navbar;

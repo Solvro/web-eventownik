@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 
 import { env } from "@/env";
 
-import { Database } from "./types";
+import type { Database } from "./types";
 
 export const supabase = createClient<Database>(
   env.NEXT_PUBLIC_SUPABASE_URL,

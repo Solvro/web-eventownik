@@ -17,7 +17,7 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-sans",
 });
 
-i18next.init({
+void i18next.init({
   lng: "pl",
   resources: {
     pl: { zod: translation },
