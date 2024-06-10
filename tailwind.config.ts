@@ -1,5 +1,6 @@
+import { PluginCreator } from "postcss";
 import { Config } from "tailwindcss";
-import { PluginCreator } from 'postcss'; 
+
 const {
   default: flattenColorPalette,
 } = require("tailwindcss/lib/util/flattenColorPalette");
@@ -21,15 +22,15 @@ const config: Config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#152959",
+        background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#152959",
-          foreground: "#FFFFFF",
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#A1C9FB",
-          foreground: "#142A56",
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
         },
         ternary: {
           DEFAULT: "#FFFFFF",
@@ -40,12 +41,12 @@ const config: Config = {
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
-          DEFAULT: "#D9E8FF",
-          foreground: "#152959",
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "#274276",
-          foreground: "#FFFFFF",
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -83,7 +84,8 @@ const config: Config = {
     function ({ addUtilities }: { addUtilities: PluginCreator<{}> }) {
       const newUtilities = {
         ".svg-black": {
-          filter: "invert(0) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)",
+          filter:
+            "invert(0) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)",
         },
       };
 
@@ -95,7 +97,7 @@ const config: Config = {
 function addVariablesForColors({ addBase, theme }: any) {
   let allColors = flattenColorPalette(theme("colors"));
   let newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
   );
 
   addBase({

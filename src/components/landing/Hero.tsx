@@ -1,11 +1,19 @@
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React from "react";
-import macbook_mockup from "../../assets/macbook_mockup.png";
+
+import { Button } from "@/components/ui/button";
+import { useCreateEvent } from "@/lib/useCreateEvent";
+
 import cube from "../../assets/cube.png";
+import macbook_mockup from "../../assets/macbook_mockup.png";
 import sphere from "../../assets/sphere.png";
-import { Button } from "@/components/ui/button"
 
 const Hero = () => {
+  const event = useCreateEvent();
+  const router = useRouter();
+
   return (
     <section>
       <div className="p-12  pb-20 xl:pb-40 flex flex-col xl:flex-row xl:justify-between xl:items-center mt-8 xl:mt-24 ">
@@ -15,7 +23,24 @@ const Hero = () => {
             <br />
             wydarzenie!
           </h1>
-          <Button variant="secondary" className={'bg-secondary py-8 px-8 rounded-md font-bold text-lg'}>Utwórz wydarzenie</Button>
+          <Button
+            onClick={() => {
+              event.mutateAsync().then((event) => {
+                router.push({
+                  pathname: "/event/[slug]/settings",
+                  query: { slug: event.ownersSlug },
+                });
+              });
+            }}
+            variant="secondary"
+            disabled={event.isPending || event.isSuccess}
+            className={"bg-secondary py-8 px-8 rounded-md font-bold text-lg"}
+          >
+            {event.isPending || event.isSuccess ? (
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+            ) : null}
+            Utwórz wydarzenie
+          </Button>
         </div>
         <div className="w-full xl:w-auto h-100 xl:h-auto mr-24 2xl:mr-56 order-1 xl:order-2 flex xl:flex-none items-center justify-center relative">
           <Image alt="Laptop" src={macbook_mockup} className="block" />
