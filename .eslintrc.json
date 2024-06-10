@@ -3,7 +3,6 @@
   "extends": [
     "@alergeek-ventures/eslint-config/typescript",
     "@alergeek-ventures/eslint-config/react",
-    "@alergeek-ventures/eslint-config/cspell",
     "next/core-web-vitals"
   ],
   "parser": "@typescript-eslint/parser",

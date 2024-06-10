@@ -1,3 +1,7 @@
 src/utils/zeus/**/*
 umami.d.ts
 lint-staged.config.mjs
+tailwind.config.ts
+next.config.mjs
+nextjs-routes.d.ts
+src/lib/types.ts

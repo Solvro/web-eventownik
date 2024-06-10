@@ -23,7 +23,9 @@ export function DateTimePicker() {
    * instead of resetting to 00:00
    */
   const handleSelect = (newDay: Date | undefined) => {
-    if (!newDay) return;
+    if (!newDay) {
+      return;
+    }
     if (!date) {
       setDate(newDay);
       return;
@@ -36,9 +38,9 @@ export function DateTimePicker() {
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild={true}>
         <Button
-          variant={"outline"}
+          variant="outline"
           className={cn(
             "justify-start text-left font-normal",
             !date && "text-muted-foreground",
@@ -56,10 +58,12 @@ export function DateTimePicker() {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={(d) => handleSelect(d)}
-          initialFocus
+          onSelect={(d) => {
+            handleSelect(d);
+          }}
+          initialFocus={true}
         />
-        <div className="p-3 border-t border-border">
+        <div className="border-t border-border p-3">
           <TimePickerDemo setDate={setDate} date={date} />
         </div>
       </PopoverContent>
