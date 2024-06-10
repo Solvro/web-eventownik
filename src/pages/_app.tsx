@@ -1,4 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { setDefaultOptions } from "date-fns";
+import { pl } from "date-fns/locale";
 import i18next from "i18next";
 import type { AppProps } from "next/app";
 import { Space_Grotesk } from "next/font/google";
@@ -11,6 +13,8 @@ import translation from "zod-i18n-map/locales/pl/zod.json";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import "@/styles/globals.css";
+
+setDefaultOptions({ locale: pl });
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
