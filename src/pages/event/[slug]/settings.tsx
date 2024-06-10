@@ -253,10 +253,14 @@ export default function Dashboard({
                                     disabled={field.disabled}
                                     className={cn(
                                       "justify-start text-left font-normal",
+                                      !(field.value instanceof Date) &&
+                                        "text-muted-foreground",
                                     )}
                                   >
                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {format(field.value, "PPP")}
+                                    {field.value instanceof Date
+                                      ? format(field.value, "PPP")
+                                      : "Wybierz datę"}
                                   </Button>
                                 </PopoverTrigger>
                                 <PopoverContent
