@@ -53,14 +53,14 @@ export const MacbookScroll = ({
   const scaleX = useTransform(
     scrollYProgress,
     [0, 0.3],
-    [1.2, isMobile ? 1 : 1.2]
+    [1.2, isMobile ? 1.5 : 1.2]
   );
   const scaleY = useTransform(
     scrollYProgress,
     [0, 0.3],
-    [0.6, isMobile ? 1 : 1.2]
+    [0.6, isMobile ? 1.5 : 1.2]
   );
-  const translate = useTransform(scrollYProgress, [0, 0.9], [0, 1000]);
+  const translate = useTransform(scrollYProgress, [0,isMobile ?0.8: 0.9], [0, isMobile ? 1900:1000]);
   const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
   const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
@@ -68,7 +68,7 @@ export const MacbookScroll = ({
   return (
     <div
       ref={ref}
-      className="flex flex-col items-center py-0 md:pb-80 justify-start flex-shrink-0 [perspective:800px] transform md:scale-100  scale-[0.35] sm:scale-50"
+      className="flex flex-col items-center py-0 md:pb-80 justify-start flex-shrink-0 [perspective:800px] transform md:scale-100  scale-[0.50] sm:scale-50"
     >
       {/* Lid */}
       <Lid
