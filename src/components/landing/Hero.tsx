@@ -11,7 +11,7 @@ import { MacbookScroll } from "../ui/macbook-scroll";
 const Hero = () => {
   return (
     <section>
-      <div className="p-12 pb-0 flex flex-col xl:flex-row xl:justify-between  mt-8 xl:mt-24 ">
+      <div className="p-12 pb-0 flex flex-col md:flex-row md:justify-between  mt-8 xl:mt-24 ">
         <div className="xl:mb-0">
           <div>
             <h1 className="text-3xl md:text-5xl 2xl:text-7xl text-primary-foreground mb-8 h-3/4 text order-2 xl:order-1 ">
