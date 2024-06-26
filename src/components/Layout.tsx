@@ -71,7 +71,7 @@ export const Layout = ({
               <nav className="grid gap-2 text-lg font-medium">
                 <Link
                   href={{
-                    hash: "#",
+                    pathname: "/",
                   }}
                   className="flex items-center gap-2 text-lg font-semibold"
                 >
@@ -80,7 +80,10 @@ export const Layout = ({
                 </Link>
                 <Link
                   href={{
-                    hash: "#",
+                    pathname: "/event/[slug]/preview",
+                    query: {
+                      slug: ownersSlug,
+                    },
                   }}
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
@@ -90,7 +93,10 @@ export const Layout = ({
 
                 <Link
                   href={{
-                    hash: "#",
+                    pathname: "/event/[slug]/settings",
+                    query: {
+                      slug: ownersSlug,
+                    },
                   }}
                   className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
                 >
