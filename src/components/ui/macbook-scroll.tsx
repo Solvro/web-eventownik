@@ -62,15 +62,19 @@ export const MacbookScroll = ({
     [0, 0.3],
     [0.6, isMobile ? 1.5 : 1.2],
   );
-  const translate = useTransform(scrollYProgress, [0,isMobile ?0.8: 0.9], [0, isMobile ? 1850:950]);
+  const translate = useTransform(
+    scrollYProgress,
+    [0, isMobile ? 0.8 : 0.9],
+    [0, isMobile ? 1850 : 950],
+  );
   const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
 
   return (
     <div
       ref={ref}
-      className="flex flex-shrink-0 scale-[0.50] transform flex-col items-center justify-start py-0 [perspective:800px] min-[900px]:scale-100 md:pb-80"
+      className="flex flex-shrink-0 scale-[0.50] transform flex-col items-center justify-start py-0 [perspective:800px] md:pb-80 min-[900px]:scale-100"
     >
-       <Lid
+      <Lid
         src={src}
         scaleX={scaleX}
         scaleY={scaleY}

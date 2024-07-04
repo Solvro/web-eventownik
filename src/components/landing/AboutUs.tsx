@@ -1,27 +1,26 @@
+import { motion } from "framer-motion";
 import Image from "next/image";
 import React from "react";
 
 import solvro_circle_logo from "@/assets/solvro_circle_logo.png";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion"
 
 export const AboutUs = () => {
   return (
     <section>
-      <div className="flex flex-col px-12 xl:my-0  xl:flex-row overflow-hidden ">
+      <div className="flex flex-col overflow-hidden px-12  xl:my-0 xl:flex-row ">
         <div className="flex justify-center xl:w-1/2 xl:justify-start">
-        <motion.div
+          <motion.div
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            initial={{  scale: 0.9 }}
-            whileInView={{  scale: 1 }}
-            viewport={{ once: true, amount: 1}}
-        >
-
-          <Image
-            src={solvro_circle_logo}
-            alt="Solvro logo"
-            className="order-1 mb-10 lg:order-1 xl:mb-0"
+            initial={{ scale: 0.9 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true, amount: 1 }}
+          >
+            <Image
+              src={solvro_circle_logo}
+              alt="Solvro logo"
+              className="order-1 mb-10 lg:order-1 xl:mb-0"
             />
           </motion.div>
         </div>
