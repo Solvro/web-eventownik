@@ -4,10 +4,12 @@ import { useRouter } from "next/router";
 import React from "react";
 
 import cube from "@/assets/cube.png";
-import macbook_mockup from "@/assets/macbook_mockup.png";
 import sphere from "@/assets/sphere.png";
 import { Button } from "@/components/ui/button";
 import { useCreateEvent } from "@/lib/useCreateEvent";
+
+import { MacbookScroll } from "../ui/macbook-scroll";
+import visionImage from "@/assets/landing_vision.png";
 
 export const Hero = () => {
   const event = useCreateEvent();

@@ -2,7 +2,6 @@ import Image from "next/image";
 import React from "react";
 
 import symbol from "@/assets/symbol.svg";
-import vision from "@/assets/vision.png";
 
 export const AboutApp = () => {
   return (
@@ -47,8 +46,8 @@ export const AboutApp = () => {
             </li>
           </ul>
         </div>
-        <div className="w-full md:ml-16 md:w-1/2 ">
-          <Image src={vision} alt="Vision" />
+        <div className="w-full md:ml-16 md:w-1/2 h-[300px]">
+        {/* Here goes vision */}
         </div>
       </div>
     </section>
