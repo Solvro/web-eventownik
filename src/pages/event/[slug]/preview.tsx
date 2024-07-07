@@ -11,6 +11,7 @@ import React, { type ReactNode, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { ReservationsTable } from "@/components/ContactTable";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +25,7 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -49,14 +51,14 @@ const BlockDialog = ({
   blockId?: string;
   parentBlockId?: string;
   onSubmit?: () => Promise<void> | void;
-  defaultValues?: { name: string; number?: number };
+  defaultValues?: { name?: string; capacity?: number };
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const form = useZodForm({
     schema: z.object({
       name: z.string().min(1).max(255).trim(),
-      number: z.coerce.number().int().nonnegative().max(10000).optional(),
+      capacity: z.coerce.number().int().nonnegative().max(10000).optional(),
     }),
     reValidateMode: "onChange",
     defaultValues,
@@ -91,7 +93,7 @@ const BlockDialog = ({
                   eventId,
                   parentBlockId,
                   name: data.name,
-                  capacity: data.number,
+                  capacity: data.capacity,
                 })
                 .then(async () => {
                   await onSubmit?.();
@@ -138,10 +140,10 @@ const BlockDialog = ({
               <div className="flex flex-col gap-4">
                 <FormField
                   control={form.control}
-                  name="number"
+                  name="capacity"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Liczba miejsc</FormLabel>
+                      <FormLabel>Liczba miejsc (opcjonalne)</FormLabel>
                       <FormControl>
                         <Input
                           id="number"
@@ -150,6 +152,9 @@ const BlockDialog = ({
                           {...field}
                         />
                       </FormControl>
+                      <FormDescription>
+                        Osoby będą mogły się do niej zapisać
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -215,7 +220,7 @@ const Preview = ({
     queryFn: async () => {
       const blocks = await supabase
         .from("blocks")
-        .select("*")
+        .select("*, reservations (*)")
         .eq("eventId", eventId);
 
       return blocks.data;
@@ -226,10 +231,15 @@ const Preview = ({
     ?.filter((block) => block.parentBlockId === blockId)
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name));
+
   const breadcrumbs =
     typeof blockId === "string"
       ? buildBreadcrumbs(allBlocksQuery.data ?? [], blockId)
       : null;
+
+  const currentBlock = allBlocksQuery.data?.find(
+    (block) => block.blockId === blockId,
+  );
 
   const parentId = breadcrumbs?.[breadcrumbs.length - 2]?.blockId;
 
@@ -282,11 +292,15 @@ const Preview = ({
                   ];
                 }, [])}
             </ol>
+
             <div className="ml-auto flex gap-4">
               <BlockDialog
                 eventId={eventId}
                 blockId={blockId}
-                defaultValues={breadcrumbs?.[breadcrumbs.length - 1]}
+                defaultValues={{
+                  name: currentBlock?.name,
+                  capacity: currentBlock?.capacity ?? undefined,
+                }}
                 onSubmit={async () => {
                   await allBlocksQuery.refetch();
                 }}
@@ -300,7 +314,8 @@ const Preview = ({
         ) : null}
       </div>
       <div className="flex w-full flex-wrap items-start gap-4">
-        <div className="flex h-72 w-72 border-spacing-1 items-center justify-center rounded-md border border-dashed border-[#71717A]">
+        {typeof currentBlock?.capacity !== "number" ||
+        typeof blockId !== "string" ? (
           <BlockDialog
             eventId={eventId}
             parentBlockId={blockId ?? undefined}
@@ -308,9 +323,16 @@ const Preview = ({
               await allBlocksQuery.refetch();
             }}
           >
-            <Button variant="outline">Kliknij aby dodać sekcję</Button>
+            <button className="flex h-72 w-72 border-spacing-1 items-center justify-center rounded-md border border-dashed border-[#71717A] transition-all hover:scale-[1.02] hover:bg-slate-50 hover:shadow-md">
+              Kliknij aby dodać sekcję
+            </button>
           </BlockDialog>
-        </div>
+        ) : (
+          <div className="mx-auto flex w-full justify-center">
+            <ReservationsTable blockId={blockId} />
+          </div>
+        )}
+
         {currentBlocks?.map((block) => (
           <button
             key={block.blockId}
