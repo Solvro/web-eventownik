@@ -9,13 +9,7 @@ const config = {
   ],
   // sharp is used in nextjs image optimization
   // slick carousel is used scss files
-  ignoreDependencies: [
-    "sharp",
-    "@radix-ui/.+",
-    "cmdk",
-    "framer-motion",
-    "@tabler/icons-react",
-  ],
+  ignoreDependencies: ["sharp", "@radix-ui/.+", "cmdk"],
 } satisfies KnipConfig;
 
 // eslint-disable-next-line import/no-default-export
