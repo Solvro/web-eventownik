@@ -18,12 +18,20 @@ const config: Config = {
       },
     },
     extend: {
+      fontSize: {
+        xxs: '10px',
+        "10px": '10px',
+        "14px": '10px',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        solvroblue: "#D9E8FF",
+        solvrogray: "#D9D9D9",
+        solvrobutton: "#203560",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
