@@ -12,7 +12,8 @@
     "format:check": "prettier --check .",
     "knip": "knip",
     "typecheck": "tsc",
-    "generate": "npx supabase gen types typescript --project-id \"kmiyeqcynkremenbffvl\" --schema public > ./src/lib/types.ts "
+    "generate": "npx supabase gen types typescript --project-id \"kmiyeqcynkremenbffvl\" --schema public > ./src/lib/types.ts ",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
@@ -41,6 +42,7 @@
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
     "framer-motion": "^11.2.9",
+    "husky": "^9.1.5",
     "i18next": "^23.11.5",
     "jotai": "^2.8.4",
     "lucide-react": "^0.379.0",
