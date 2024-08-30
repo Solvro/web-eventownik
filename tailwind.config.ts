@@ -19,9 +19,7 @@ const config: Config = {
     },
     extend: {
       fontSize: {
-        xxs: '10px',
-        "10px": '10px',
-        "14px": '10px',
+        xxs: "10px",
       },
       colors: {
         border: "hsl(var(--border))",

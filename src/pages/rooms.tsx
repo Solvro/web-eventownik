@@ -28,8 +28,17 @@ export default function Rooms() {
         {[1, 2, 3, 4, 5, 6, 7, 8].map((room) => (
           <div
             key={room}
-            onClick={() => toggleCard(room)}
+            onClick={() => {
+              toggleCard(room);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                toggleCard(room);
+              }
+            }}
+            tabIndex={0}
             className="relative flex flex-col overflow-hidden rounded-lg border border-black"
+            role="button"
           >
             <div className="flex h-[200px] cursor-pointer flex-col items-center justify-center gap-4 p-4 text-center">
               <h2 className="text-base font-semibold">Pokój nr {room}</h2>
@@ -60,7 +69,9 @@ export default function Rooms() {
 
             <button
               className="absolute bottom-0 left-0 h-10 w-full rounded-t-none border-t border-black bg-solvroblue text-black"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
             >
               Zapisz się do pokoju
             </button>
