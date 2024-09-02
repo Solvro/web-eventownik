@@ -1,12 +1,12 @@
 export type Json =
-  | Json[]
-  | boolean
-  | number
   | string
+  | number
+  | boolean
+  | null
   | { [key: string]: Json | undefined }
-  | null;
+  | Json[];
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       blocks: {
@@ -56,39 +56,62 @@ export interface Database {
       };
       events: {
         Row: {
+          closingRegistrationAt: string | null;
+          content: Json | null;
           createdAt: string;
           description: string | null;
+          displayOnEverySection: boolean | null;
           eventDate: string | null;
           eventId: string;
           name: string;
+          openingRegistrationAt: string | null;
           organizerName: string;
           ownersSlug: string;
-          updatedAt: string | null;
+          ownerUUID: string | null;
           participantsSlug: string;
+          updatedAt: string | null;
         };
         Insert: {
+          closingRegistrationAt?: string | null;
+          content?: Json | null;
           createdAt?: string;
           description?: string | null;
+          displayOnEverySection?: boolean | null;
           eventDate?: string | null;
           eventId?: string;
           name: string;
+          openingRegistrationAt?: string | null;
           organizerName: string;
           ownersSlug: string;
-          updatedAt?: string | null;
+          ownerUUID?: string | null;
           participantsSlug: string;
+          updatedAt?: string | null;
         };
         Update: {
+          closingRegistrationAt?: string | null;
+          content?: Json | null;
           createdAt?: string;
           description?: string | null;
+          displayOnEverySection?: boolean | null;
           eventDate?: string | null;
           eventId?: string;
           name?: string;
+          openingRegistrationAt?: string | null;
           organizerName?: string;
           ownersSlug?: string;
-          updatedAt?: string | null;
+          ownerUUID?: string | null;
           participantsSlug?: string;
+          updatedAt?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "events_ownerUUID_fkey";
+            columns: ["ownerUUID"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       reservations: {
         Row: {
@@ -133,7 +156,25 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      generate_unique_slug: {
+        Args: {
+          event_name: string;
+        };
+        Returns: string;
+      };
+      get_section_data: {
+        Args: {
+          section_uuid: string;
+        };
+        Returns: {
+          lp: number;
+          imie: string;
+          nazwisko: string;
+          data_dodania: string;
+          sekcja_koncowa: string;
+          drzewko_sekcji: string;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;
@@ -142,7 +183,7 @@ export interface Database {
       [_ in never]: never;
     };
   };
-}
+};
 
 type PublicSchema = Database[Extract<keyof Database, "public">];
 
