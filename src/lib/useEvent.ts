@@ -1,12 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { supabase } from "./supabase";
-import type { Tables } from "./types";
 
-export const useEvent = (slug: string, initialData?: Tables<"events">) => {
-  const query = useQuery({
+export const useEvent = (slug: string) => {
+  const query = useSuspenseQuery({
     queryKey: ["event", slug],
-    initialData,
+
     queryFn: async () => {
       const event = await supabase
         .from("events")
