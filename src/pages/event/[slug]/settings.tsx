@@ -266,13 +266,13 @@ export default function Dashboard({
                   type="url"
                   disabled={true}
                   className="cursor-copy"
-                  value={`https://eventownik.solvro.pl/event/${event.data?.usersSlug}`}
+                  value={`https://eventownik.solvro.pl/event/${event.data?.participantsSlug}`}
                 />
                 <Button
                   onClick={() => {
                     void navigator.clipboard
                       .writeText(
-                        `https://eventownik.solvro.pl/event/${event.data?.usersSlug}`,
+                        `https://eventownik.solvro.pl/event/${event.data?.participantsSlug}`,
                       )
                       .then(() => {
                         toast("Link skopiowany do schowka");
