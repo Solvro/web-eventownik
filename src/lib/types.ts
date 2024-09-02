@@ -64,7 +64,7 @@ export interface Database {
           organizerName: string;
           ownersSlug: string;
           updatedAt: string | null;
-          usersSlug: string;
+          participantsSlug: string;
         };
         Insert: {
           createdAt?: string;
@@ -75,7 +75,7 @@ export interface Database {
           organizerName: string;
           ownersSlug: string;
           updatedAt?: string | null;
-          usersSlug: string;
+          participantsSlug: string;
         };
         Update: {
           createdAt?: string;
@@ -86,7 +86,7 @@ export interface Database {
           organizerName?: string;
           ownersSlug?: string;
           updatedAt?: string | null;
-          usersSlug?: string;
+          participantsSlug?: string;
         };
         Relationships: [];
       };
