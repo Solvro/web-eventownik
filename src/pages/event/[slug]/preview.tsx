@@ -337,6 +337,7 @@ const Preview = ({
 
         {currentBlocks?.map((block) => (
           <BlockCard
+            className="items-center justify-center hover:scale-[1.02]"
             key={block.blockId}
             onClick={() => {
               void setBlockId(block.blockId);

@@ -82,7 +82,7 @@ export default function Building({
 
   return (
     <div className="flex min-h-screen flex-col items-center">
-      <div className="w-full bg-gray-200 pb-4 pt-8 text-center text-xl font-bold">
+      <div className="w-full bg-blue-100 pb-4 pt-8 text-center text-xl font-medium">
         {event.data?.name}
       </div>
       <div className="w-full max-w-screen-sm">
@@ -100,9 +100,7 @@ export default function Building({
               <div className="w-4" />
             )}
           </div>
-          <div className="flex-grow text-center">
-            {event.data?.name ?? currentBlock?.name}
-          </div>
+          <div className="flex-grow text-center">{currentBlock?.name}</div>
         </div>
 
         <motion.div
