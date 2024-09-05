@@ -6,7 +6,11 @@ const withRoutes = nextRoutes();
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["cms.solvro.pl"],
+    remotePatterns: [
+      {
+        hostname: "cms.solvro.pl",
+      },
+    ],
   },
 };
 

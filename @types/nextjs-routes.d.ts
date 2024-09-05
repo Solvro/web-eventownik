@@ -12,9 +12,11 @@ declare module "nextjs-routes" {
 
   export type Route =
     | StaticRoute<"/">
-    | StaticRoute<"/building">
     | DynamicRoute<"/event/[slug]/preview", { "slug": string }>
     | DynamicRoute<"/event/[slug]/settings", { "slug": string }>
+    | DynamicRoute<"/rejestracja/[participationSlug]", { "participationSlug": string }>
+    | DynamicRoute<"/rejestracja/[participationSlug]/[blockId]/[reservationId]", { "participationSlug": string; "blockId": string; "reservationId": string }>
+    | DynamicRoute<"/rejestracja/[participationSlug]/[blockId]/formularz", { "participationSlug": string; "blockId": string }>
     | StaticRoute<"/rooms">;
 
   interface StaticRoute<Pathname> {

@@ -2,7 +2,7 @@ import { CalendarIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
 import type { InferGetServerSidePropsType } from "next";
-import type { GetServerSidePropsContext } from "nextjs-routes";
+import { type GetServerSidePropsContext, route } from "nextjs-routes";
 import { parseAsString, useQueryState } from "nuqs";
 import { useEffect } from "react";
 import { toast } from "sonner";
@@ -33,6 +33,7 @@ import { supabase } from "@/lib/supabase";
 import { createSSRClient } from "@/lib/supabaseSSR";
 import type { TablesUpdate } from "@/lib/types";
 import { useEvent } from "@/lib/useEvent";
+import { useIsClient } from "@/lib/useIsClient";
 import { useZodForm } from "@/lib/useZodForm";
 import { cn } from "@/lib/utils";
 
@@ -95,6 +96,8 @@ export default function Dashboard({
       return updatedEvent;
     },
   });
+
+  const isClient = useIsClient();
 
   return (
     <Layout ownersSlug={ownersSlug}>
@@ -263,17 +266,33 @@ export default function Dashboard({
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="email">Link do wydarzenia</Label>
               <div className="flex w-full max-w-sm items-center space-x-2">
-                <Input
-                  type="url"
-                  disabled={true}
-                  className="cursor-copy"
-                  value={`https://eventownik.solvro.pl/event/${event.data?.participantsSlug}`}
-                />
+                {isClient ? (
+                  <Input
+                    type="url"
+                    disabled={true}
+                    className="cursor-copy"
+                    value={`${window.location.origin}${route({
+                      pathname: "/rejestracja/[participationSlug]",
+                      query: {
+                        participationSlug: encodeURIComponent(
+                          event.data?.participantsSlug ?? "",
+                        ),
+                      },
+                    })}`}
+                  />
+                ) : null}
                 <Button
                   onClick={() => {
                     void navigator.clipboard
                       .writeText(
-                        `https://eventownik.solvro.pl/event/${event.data?.participantsSlug}`,
+                        `${window.location.origin}${route({
+                          pathname: "/rejestracja/[participationSlug]",
+                          query: {
+                            participationSlug: encodeURIComponent(
+                              event.data?.participantsSlug ?? "",
+                            ),
+                          },
+                        })}`,
                       )
                       .then(() => {
                         toast("Link skopiowany do schowka");
