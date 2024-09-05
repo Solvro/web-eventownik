@@ -16,8 +16,7 @@ declare module "nextjs-routes" {
     | DynamicRoute<"/event/[slug]/settings", { "slug": string }>
     | DynamicRoute<"/rejestracja/[participationSlug]", { "participationSlug": string }>
     | DynamicRoute<"/rejestracja/[participationSlug]/[blockId]/[reservationId]", { "participationSlug": string; "blockId": string; "reservationId": string }>
-    | DynamicRoute<"/rejestracja/[participationSlug]/[blockId]/formularz", { "participationSlug": string; "blockId": string }>
-    | StaticRoute<"/rooms">;
+    | DynamicRoute<"/rejestracja/[participationSlug]/[blockId]/formularz", { "participationSlug": string; "blockId": string }>;
 
   interface StaticRoute<Pathname> {
     pathname: Pathname;
