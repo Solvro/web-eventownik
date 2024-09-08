@@ -311,9 +311,9 @@ export default function Dashboard({
                     disabled={true}
                     className="cursor-copy"
                     value={`${window.location.origin}${route({
-                      pathname: "/event/[ownersSlug]/preview",
+                      pathname: "/event/[slug]/preview",
                       query: {
-                        ownersSlug: encodeURIComponent(
+                        slug: encodeURIComponent(
                           event.data?.ownersSlug ?? "",
                         ),
                       },
@@ -325,9 +325,9 @@ export default function Dashboard({
                     void navigator.clipboard
                       .writeText(
                         `${window.location.origin}${route({
-                          pathname: "/event/[ownersSlug]/preview",
+                          pathname: "/event/[slug]/preview",
                           query: {
-                            ownersSlug: encodeURIComponent(
+                            slug: encodeURIComponent(
                               event.data?.ownersSlug ?? "",
                             ),
                           },
