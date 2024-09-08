@@ -11,6 +11,7 @@ import React, { type ReactNode, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { BlockCard } from "@/components/Block";
 import { ReservationsTable } from "@/components/ContactTable";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -335,9 +336,9 @@ const Preview = ({
         )}
 
         {currentBlocks?.map((block) => (
-          <button
+          <BlockCard
+            className="items-center justify-center hover:scale-[1.02]"
             key={block.blockId}
-            className="flex h-72 w-72 border-spacing-1 items-center justify-center rounded-md border border-[#71717A] transition-all duration-300 ease-in-out hover:scale-[1.02] hover:shadow-md"
             onClick={() => {
               void setBlockId(block.blockId);
             }}
@@ -350,7 +351,7 @@ const Preview = ({
                 </p>
               ) : null}
             </div>
-          </button>
+          </BlockCard>
         ))}
       </div>
     </Layout>
