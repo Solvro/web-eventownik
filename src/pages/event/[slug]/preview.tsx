@@ -11,10 +11,10 @@ import React, { type ReactNode, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { BlockCard } from "@/components/Block";
 import { ReservationsTable } from "@/components/ContactTable";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
+import { BlockCard } from "@/components/Block";
 import {
   Dialog,
   DialogContent,
