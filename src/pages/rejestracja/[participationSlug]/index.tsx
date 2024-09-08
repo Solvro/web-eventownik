@@ -5,20 +5,21 @@ import Link from "next/link";
 import type { GetServerSidePropsContext } from "nextjs-routes";
 import { parseAsString, useQueryState } from "nuqs";
 import * as React from "react";
+import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import { z } from "zod";
+
 import { buttonVariants } from "@/components/ui/button";
-import { supabase } from "@/lib/supabase";
-import { createSSRClient } from "@/lib/supabaseSSR";
-import { useUserEvent } from "@/lib/useUserEvent";
-import type { Block } from "@/types/Block";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import { createSSRClient } from "@/lib/supabaseSSR";
+import { useUserEvent } from "@/lib/useUserEvent";
+import type { Block } from "@/types/Block";
 
 function buildBreadcrumbs(blocks: Block[], currentBlockId: string) {
   const blockMap: { [key: string]: Block } = {};
@@ -130,33 +131,41 @@ export default function Building({
                   }
                 }}
                 tabIndex={0}
-
                 key={block.blockId}
-                className="flex cursor-pointer aspect-square flex-shrink-0 flex-col items-center justify-center rounded-lg border-black">
+                className="flex aspect-square flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-lg border-black"
+              >
                 <CardHeader className="text-center">
-                  <CardTitle className="text-base">
-                    {block.name}
-                  </CardTitle>
-                  <p className="text-sm"> {typeof block.capacity === "number" ? (
-                    <p className="text-sm text-gray-500">
-                      Miejsca: {block.reservations.length}/{block.capacity}
-                    </p>
-                  ) : null}</p>
-                  <CardDescription className="text-xxs text-center">
-                    <span>  {expandedCard !== block.blockId ? "Kliknij w sekcję, aby wyświetlić szczegóły" : "Odklinij, aby wyświetlić mniej szczegółów"} </span>
+                  <CardTitle className="text-base">{block.name}</CardTitle>
+                  <p className="text-sm">
+                    {" "}
+                    {typeof block.capacity === "number" ? (
+                      <p className="text-sm text-gray-500">
+                        Miejsca: {block.reservations.length}/{block.capacity}
+                      </p>
+                    ) : null}
+                  </p>
+                  <CardDescription className="text-center text-xxs">
+                    <span>
+                      {" "}
+                      {expandedCard !== block.blockId
+                        ? "Kliknij w sekcję, aby wyświetlić szczegóły"
+                        : "Odklinij, aby wyświetlić mniej szczegółów"}{" "}
+                    </span>
 
                     <div
-                      className={` absolute inset-0 flex flex-col items-center justify-center bg-white ${expandedCard === block.blockId
-                        ? "translate-y-0 opacity-100"
-                        : "translate-y-full opacity-0"
-                        }
-                        ${expandedCard === block.blockId
-                          ? "relative"
-                          : "absolute"
+                      className={` absolute inset-0 flex flex-col items-center justify-center bg-white ${
+                        expandedCard === block.blockId
+                          ? "translate-y-0 opacity-100"
+                          : "translate-y-full opacity-0"
+                      }
+                        ${
+                          expandedCard === block.blockId
+                            ? "relative"
+                            : "absolute"
                         }`}
                     >
                       <div className="cursor-pointer text-center">
-                        <ul className="mb-2 p-2 max-h-20 list-inside list-decimal overflow-y-auto text-xs">
+                        <ul className="mb-2 max-h-20 list-inside list-decimal overflow-y-auto p-2 text-xs">
                           {block.reservations.map((reservation) => (
                             <li key={reservation.reservationId}>
                               {reservation.firstName} {reservation.lastName}
@@ -165,39 +174,43 @@ export default function Building({
                         </ul>
                       </div>
 
-                      {(block.reservations.length < block.capacity) ? (<Link
-                        href={{
-                          pathname:
-                            "/rejestracja/[participationSlug]/[blockId]/formularz",
-                          query: {
-                            participationSlug: participantsSlug,
-                            blockId: block.blockId,
-                          },
-                        }}
-                        className={buttonVariants({
-                          className: "mt-auto w-full self-end justify-self-end",
-                        })}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                        }}
-                      >
-                        Zapisz się
-                      </Link>) : (<p className='text-center'>Brak miejsc</p>)}
+                      {block.reservations.length < block.capacity ? (
+                        <Link
+                          href={{
+                            pathname:
+                              "/rejestracja/[participationSlug]/[blockId]/formularz",
+                            query: {
+                              participationSlug: participantsSlug,
+                              blockId: block.blockId,
+                            },
+                          }}
+                          className={buttonVariants({
+                            className:
+                              "mt-auto w-full self-end justify-self-end",
+                          })}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          Zapisz się
+                        </Link>
+                      ) : (
+                        <p className="text-center">Brak miejsc</p>
+                      )}
                     </div>
-
                   </CardDescription>
                 </CardHeader>
               </Card>
             ) : (
-              <Card onClick={() => {
-                void setBlockId(block.blockId);
-              }}
+              <Card
+                onClick={() => {
+                  void setBlockId(block.blockId);
+                }}
                 key={block.blockId}
-                className="flex cursor-pointer aspect-square flex-shrink-0 flex-col items-center justify-center rounded-lg border-black">
+                className="flex aspect-square flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-lg border-black"
+              >
                 <CardHeader className="text-center">
-                  <CardTitle className="text-base">
-                    {block.name}
-                  </CardTitle>
+                  <CardTitle className="text-base">{block.name}</CardTitle>
                   <CardDescription className="text-xxs">
                     Kliknij w sekcję, aby wyświetlić szczegóły
                   </CardDescription>

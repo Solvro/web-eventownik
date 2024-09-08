@@ -66,7 +66,7 @@ const Submit = ({
           reservationId: data.reservationId,
         },
       });
-      router.reload()
+      router.reload();
     },
   });
 
