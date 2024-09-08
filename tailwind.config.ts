@@ -27,9 +27,6 @@ const config: Config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        solvroblue: "#D9E8FF",
-        solvrogray: "#D9D9D9",
-        solvrobutton: "#203560",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
