@@ -39,6 +39,7 @@ import type { Tables, TablesInsert } from "@/lib/types";
 import { useEvent } from "@/lib/useEvent";
 import { useZodForm } from "@/lib/useZodForm";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const BlockDialog = ({
   children,
@@ -296,6 +297,7 @@ const Preview = ({
             </ol>
 
             <div className="ml-auto flex gap-4">
+              <Button variant="ghost" onClick={() => window.open(`https://kmiyeqcynkremenbffvl.supabase.co/functions/v1/generate_excel?section_uuid=${blockId}`)}>Export</Button>
               <BlockDialog
                 eventId={eventId}
                 blockId={blockId}
@@ -317,7 +319,7 @@ const Preview = ({
       </div>
       <div className="flex w-full flex-wrap items-start gap-4">
         {typeof currentBlock?.capacity !== "number" ||
-        typeof blockId !== "string" ? (
+          typeof blockId !== "string" ? (
           <BlockDialog
             eventId={eventId}
             parentBlockId={blockId ?? undefined}
