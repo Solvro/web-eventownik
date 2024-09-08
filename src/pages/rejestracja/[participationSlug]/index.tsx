@@ -131,7 +131,7 @@ export default function Building({
                     </li>
                   ))}
                 </ol>
-                <Link
+                {(block.reservations.length < block.capacity) ? (<Link
                   href={{
                     pathname:
                       "/rejestracja/[participationSlug]/[blockId]/formularz",
@@ -148,7 +148,7 @@ export default function Building({
                   }}
                 >
                   Zapisz się
-                </Link>
+                </Link>) : (<p className='text-center pb-2'>Brak miejsc</p>)}
               </div>
             ) : (
               <BlockCard
