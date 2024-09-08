@@ -313,9 +313,7 @@ export default function Dashboard({
                     value={`${window.location.origin}${route({
                       pathname: "/event/[slug]/preview",
                       query: {
-                        slug: encodeURIComponent(
-                          event.data?.ownersSlug ?? "",
-                        ),
+                        slug: encodeURIComponent(event.data?.ownersSlug ?? ""),
                       },
                     })}`}
                   />
