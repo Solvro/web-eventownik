@@ -7,13 +7,18 @@ import { parseAsString, useQueryState } from "nuqs";
 import * as React from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import { z } from "zod";
-
-import { BlockCard, blockCardVariants } from "@/components/Block";
 import { buttonVariants } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import { createSSRClient } from "@/lib/supabaseSSR";
 import { useUserEvent } from "@/lib/useUserEvent";
 import type { Block } from "@/types/Block";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useState } from "react";
 
 function buildBreadcrumbs(blocks: Block[], currentBlockId: string) {
   const blockMap: { [key: string]: Block } = {};
@@ -79,6 +84,11 @@ export default function Building({
   );
 
   const parentId = breadcrumbs?.[breadcrumbs.length - 2]?.blockId;
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
+
+  const toggleCard = (cardId: string) => {
+    setExpandedCard(expandedCard === cardId ? null : cardId);
+  };
 
   return (
     <div className="flex min-h-screen flex-col items-center">
@@ -110,70 +120,89 @@ export default function Building({
         >
           {currentBlocks?.map((block) =>
             typeof block.capacity === "number" ? (
-              <div
-                className={blockCardVariants({
-                  className: "flex h-auto w-auto min-w-60 flex-col px-4",
-                })}
-                key={block.blockId}
-              >
-                <div className="mt-12 w-full text-center">
-                  <h2 className="text-xl font-bold">{block.name}</h2>
-                  {typeof block.capacity === "number" ? (
-                    <p className="text-sm text-gray-500">
-                      {block.reservations.length}/{block.capacity}
-                    </p>
-                  ) : null}
-                </div>
-                <ol className="mx-2 mb-4 mt-4 list-inside list-disc">
-                  {block.reservations.map((reservation) => (
-                    <li key={reservation.reservationId}>
-                      {reservation.firstName} {reservation.lastName}
-                    </li>
-                  ))}
-                </ol>
-                {(block.reservations.length < block.capacity) ? (<Link
-                  href={{
-                    pathname:
-                      "/rejestracja/[participationSlug]/[blockId]/formularz",
-                    query: {
-                      participationSlug: participantsSlug,
-                      blockId: block.blockId,
-                    },
-                  }}
-                  className={buttonVariants({
-                    className: "mb-4 mt-auto  w-full self-end justify-self-end",
-                  })}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  Zapisz się
-                </Link>) : (<p className='text-center pb-2'>Brak miejsc</p>)}
-              </div>
-            ) : (
-              <BlockCard
-                className="flex h-44 w-44 flex-col"
+              <Card
                 onClick={() => {
-                  void setBlockId(block.blockId);
+                  toggleCard(block.blockId);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    toggleCard(block.blockId);
+                  }
+                }}
+                tabIndex={0}
+
                 key={block.blockId}
-              >
-                <div className="text-center">
-                  <h2 className="text-xl font-bold">{block.name}</h2>
-                  {typeof block.capacity === "number" ? (
+                className="flex cursor-pointer aspect-square flex-shrink-0 flex-col items-center justify-center rounded-lg border-black">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-base">
+                    {block.name}
+                  </CardTitle>
+                  <p className="text-sm"> {typeof block.capacity === "number" ? (
                     <p className="text-sm text-gray-500">
-                      Liczba miejsc: {block.capacity}
+                      Miejsca: {block.reservations.length}/{block.capacity}
                     </p>
-                  ) : null}
-                </div>
-                <ul className="list-inside list-disc text-sm">
-                  {block.reservations.map((reservation) => (
-                    <li key={reservation.reservationId}>
-                      {reservation.firstName} {reservation.lastName}
-                    </li>
-                  ))}
-                </ul>
-              </BlockCard>
+                  ) : null}</p>
+                  <CardDescription className="text-xxs text-center">
+                    <span>  {expandedCard !== block.blockId ? "Kliknij w sekcję, aby wyświetlić szczegóły" : "Odklinij, aby wyświetlić mniej szczegółów"} </span>
+
+                    <div
+                      className={` absolute inset-0 flex flex-col items-center justify-center bg-white ${expandedCard === block.blockId
+                        ? "translate-y-0 opacity-100"
+                        : "translate-y-full opacity-0"
+                        }
+                        ${expandedCard === block.blockId
+                          ? "relative"
+                          : "absolute"
+                        }`}
+                    >
+                      <div className="cursor-pointer text-center">
+                        <ul className="mb-2 p-2 max-h-20 list-inside list-decimal overflow-y-auto text-xs">
+                          {block.reservations.map((reservation) => (
+                            <li key={reservation.reservationId}>
+                              {reservation.firstName} {reservation.lastName}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {(block.reservations.length < block.capacity) ? (<Link
+                        href={{
+                          pathname:
+                            "/rejestracja/[participationSlug]/[blockId]/formularz",
+                          query: {
+                            participationSlug: participantsSlug,
+                            blockId: block.blockId,
+                          },
+                        }}
+                        className={buttonVariants({
+                          className: "mt-auto w-full self-end justify-self-end",
+                        })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                        }}
+                      >
+                        Zapisz się
+                      </Link>) : (<p className='text-center'>Brak miejsc</p>)}
+                    </div>
+
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            ) : (
+              <Card onClick={() => {
+                void setBlockId(block.blockId);
+              }}
+                key={block.blockId}
+                className="flex cursor-pointer aspect-square flex-shrink-0 flex-col items-center justify-center rounded-lg border-black">
+                <CardHeader className="text-center">
+                  <CardTitle className="text-base">
+                    {block.name}
+                  </CardTitle>
+                  <CardDescription className="text-xxs">
+                    Kliknij w sekcję, aby wyświetlić szczegóły
+                  </CardDescription>
+                </CardHeader>
+              </Card>
             ),
           )}
         </motion.div>
