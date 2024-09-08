@@ -109,8 +109,8 @@ export default function Dashboard({
         <TabsList>
           <TabsTrigger value="settings">Ogólne</TabsTrigger>
           <TabsTrigger value="sharing">Udostępnianie</TabsTrigger>
-          <TabsTrigger value="customisation">Personalizacja</TabsTrigger>
-          <TabsTrigger value="other">Inne</TabsTrigger>
+          {/* <TabsTrigger value="customisation">Personalizacja</TabsTrigger> */}
+          {/* <TabsTrigger value="other">Inne</TabsTrigger> */}
         </TabsList>
         <TabsContent value="settings">
           <Form {...form}>
@@ -303,8 +303,48 @@ export default function Dashboard({
                 </Button>
               </div>
             </div>
-            <hr />
             <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="email">Link administratora</Label>
+              <div className="flex w-full max-w-sm items-center space-x-2">
+                {isClient ? (
+                  <Input
+                    type="url"
+                    disabled={true}
+                    className="cursor-copy"
+                    value={`${window.location.origin}${route({
+                      pathname: "/event/[ownersSlug]/preview",
+                      query: {
+                        ownersSlug: encodeURIComponent(
+                          event.data?.ownersSlug ?? "",
+                        ),
+                      },
+                    })}`}
+                  />
+                ) : null}
+                <Button
+                  onClick={() => {
+                    void navigator.clipboard
+                      .writeText(
+                        `${window.location.origin}${route({
+                          pathname: "/event/[ownersSlug]/preview",
+                          query: {
+                            ownersSlug: encodeURIComponent(
+                              event.data?.ownersSlug ?? "",
+                            ),
+                          },
+                        })}`,
+                      )
+                      .then(() => {
+                        toast("Link skopiowany do schowka");
+                      });
+                  }}
+                >
+                  Skopiuj
+                </Button>
+              </div>
+            </div>
+            {/* <hr /> */}
+            {/* <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="email">Data i godz. otwarcia zapisów</Label>
               <DateTimePicker />
             </div>
@@ -332,7 +372,7 @@ export default function Dashboard({
                 id="people-limit-per-sector"
                 placeholder="2"
               />
-            </div>
+            </div> */}
           </div>
         </TabsContent>
         <TabsContent value="customisation">
