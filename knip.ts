@@ -6,6 +6,7 @@ const config = {
     "src/lib/types.ts",
     "postcss.config.mjs",
     "lint-staged.config.mjs",
+    "src/components/Block.tsx"
   ],
   // sharp is used in nextjs image optimization
   // slick carousel is used scss files
