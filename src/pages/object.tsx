@@ -29,7 +29,7 @@ export default function Event() {
       </h1>
       {selectedObject === null ? (
         <>
-          <div className="flex w-11/12 items-center justify-center rounded bg-solvroblue p-3 text-center text-xs font-bold">
+          <div className="bg-solvroblue flex w-11/12 items-center justify-center rounded p-3 text-center text-xs font-bold">
             <div className="text-center">Wysiwyg</div>
           </div>
 
@@ -65,7 +65,7 @@ export default function Event() {
         </>
       ) : (
         <>
-          <div className="flex w-11/12 items-center justify-center rounded bg-solvroblue p-3 text-center text-xs font-bold">
+          <div className="bg-solvroblue flex w-11/12 items-center justify-center rounded p-3 text-center text-xs font-bold">
             <div className="flex-shrink-0 pl-2">
               <div
                 onClick={() => {
@@ -133,7 +133,7 @@ export default function Event() {
                     <p className="text-xs">Odklinij, aby zobaczyć mniej</p>
                   </div>
                   <button
-                    className="absolute bottom-0 left-0 h-10 w-full rounded-t-none bg-solvroblue text-black"
+                    className="bg-solvroblue absolute bottom-0 left-0 h-10 w-full rounded-t-none text-black"
                     onClick={(e) => {
                       e.stopPropagation();
                     }}

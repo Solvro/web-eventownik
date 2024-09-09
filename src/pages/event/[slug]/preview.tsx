@@ -296,6 +296,16 @@ const Preview = ({
             </ol>
 
             <div className="ml-auto flex gap-4">
+              <Button
+                variant="ghost"
+                onClick={() =>
+                  window.open(
+                    `https://kmiyeqcynkremenbffvl.supabase.co/functions/v1/generate_excel?section_uuid=${blockId}`,
+                  )
+                }
+              >
+                Export
+              </Button>
               <BlockDialog
                 eventId={eventId}
                 blockId={blockId}
