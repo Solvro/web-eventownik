@@ -132,7 +132,7 @@ export default function Building({
                 }}
                 tabIndex={0}
                 key={block.blockId}
-                className="transition-all duration-300 ease-in-out hover:shadow-md flex aspect-square flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-lg border-black"
+                className="flex aspect-square flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-lg border-black transition-all duration-300 ease-in-out hover:shadow-md"
               >
                 <CardHeader className="text-center">
                   <CardTitle className="text-base">{block.name}</CardTitle>
@@ -207,7 +207,7 @@ export default function Building({
                   void setBlockId(block.blockId);
                 }}
                 key={block.blockId}
-                className="transition-all duration-300 ease-in-out hover:shadow-md flex aspect-square flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-lg border-black"
+                className="flex aspect-square flex-shrink-0 cursor-pointer flex-col items-center justify-center rounded-lg border-black transition-all duration-300 ease-in-out hover:shadow-md"
               >
                 <CardHeader className="text-center">
                   <CardTitle className="text-base">{block.name}</CardTitle>
