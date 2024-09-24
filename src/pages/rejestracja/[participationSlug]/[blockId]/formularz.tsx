@@ -1,16 +1,26 @@
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
+import { useAtom, useSetAtom } from "jotai";
 import type { InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import type { GetServerSidePropsContext } from "nextjs-routes";
-import React from "react";
+import type { GetServerSidePropsContext, Route } from "nextjs-routes";
+import React, { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { userRegistrationsAtom } from "@/atoms/userRegistrations";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -24,6 +34,80 @@ import { supabase } from "@/lib/supabase";
 import { createSSRClient } from "@/lib/supabaseSSR";
 import { useZodForm } from "@/lib/useZodForm";
 
+const DeleteDialog = ({
+  reservationId,
+  name,
+  blockName,
+}: {
+  reservationId: string;
+  name: string;
+  blockName: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const setUserRegistrations = useSetAtom(userRegistrationsAtom);
+  const router = useRouter();
+  const removeReservation = useMutation({
+    mutationFn: async () => {
+      await supabase
+        .from("reservations")
+        .delete()
+        .eq("reservationId", reservationId)
+        .throwOnError();
+    },
+    onSuccess: async () => {
+      await router.replace(router.asPath as unknown as Route);
+      setUserRegistrations((prev) => prev.filter((id) => id !== reservationId));
+    },
+  });
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild={true}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        >
+          Wypisz
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Usuń uczestnika</DialogTitle>
+        </DialogHeader>
+        <div>
+          <p>
+            Czy na pewno chcesz usunąć {name} z {blockName}?
+          </p>
+        </div>
+        <DialogFooter className="gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              setIsOpen(false);
+            }}
+          >
+            Nie
+          </Button>
+          <Button
+            type="submit"
+            loading={removeReservation.isPending}
+            onClick={() => {
+              void removeReservation.mutateAsync().then(() => {
+                setIsOpen(false);
+              });
+            }}
+          >
+            Tak
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const Submit = ({
   event,
   blockId,
@@ -36,6 +120,10 @@ const Submit = ({
       lastName: z.string().min(1),
     }),
   });
+
+  const [userRegistrations, setUserRegistrations] = useAtom(
+    userRegistrationsAtom,
+  );
 
   const addReservation = useMutation({
     mutationFn: async (data: { firstName: string; lastName: string }) => {
@@ -66,7 +154,8 @@ const Submit = ({
           reservationId: data.reservationId,
         },
       });
-      router.reload();
+
+      setUserRegistrations((prev) => [...prev, data.reservationId]);
     },
   });
 
@@ -104,17 +193,29 @@ const Submit = ({
           </li>
           <li className="mt-4">
             <span className="font-semibold">Rezerwacje:</span>
-            <ul className="list-inside list-disc text-sm">
+            <ul className="flex flex-col gap-2 text-sm">
               {block.reservations
                 .sort((a, b) => {
                   return a.createdAt.localeCompare(b.createdAt) * -1;
                 })
                 .map((reservation) => (
-                  <li key={reservation.reservationId}>
-                    {reservation.firstName} {reservation.lastName},{" "}
-                    {formatDistanceToNow(new Date(reservation.createdAt), {
-                      addSuffix: true,
-                    })}
+                  <li
+                    key={reservation.reservationId}
+                    className="flex items-center justify-between"
+                  >
+                    <p>
+                      {reservation.firstName} {reservation.lastName},{" "}
+                      {formatDistanceToNow(new Date(reservation.createdAt), {
+                        addSuffix: true,
+                      })}
+                    </p>
+                    {userRegistrations.includes(reservation.reservationId) ? (
+                      <DeleteDialog
+                        name={`${reservation.firstName} ${reservation.lastName}`}
+                        blockName={block.name}
+                        reservationId={reservation.reservationId}
+                      />
+                    ) : null}
                   </li>
                 ))}
             </ul>
