@@ -12,6 +12,7 @@ declare module "nextjs-routes" {
 
   export type Route =
     | StaticRoute<"/">
+    | StaticRoute<"/editor">
     | DynamicRoute<"/event/[slug]/preview", { "slug": string }>
     | DynamicRoute<"/event/[slug]/settings", { "slug": string }>
     | StaticRoute<"/object">

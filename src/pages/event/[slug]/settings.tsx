@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { PlateEditor } from "@/components/Editor";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -209,14 +210,10 @@ export default function Dashboard({
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <div className="grid w-full items-center gap-1.5">
                         <FormLabel htmlFor="description">Opis</FormLabel>
                         <FormControl>
-                          <Textarea
-                            id="description"
-                            {...field}
-                            placeholder="Bal inżyniera już 15.06! Zapraszamy do zapisywania się na wybrane miejsca :)"
-                          />
+                          <PlateEditor />
                         </FormControl>
                         <FormMessage />
                       </div>

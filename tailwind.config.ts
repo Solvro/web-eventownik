@@ -1,13 +1,12 @@
-import type { PluginCreator } from "postcss";
-import type { Config } from "tailwindcss";
-
-const {
-  default: flattenColorPalette,
-} = require("tailwindcss/lib/util/flattenColorPalette");
-
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+module.exports = {
   darkMode: ["class"],
-  content: ["./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -18,9 +17,6 @@ const config: Config = {
       },
     },
     extend: {
-      fontSize: {
-        xxs: "10px",
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -34,10 +30,6 @@ const config: Config = {
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
-        },
-        ternary: {
-          DEFAULT: "#FFFFFF",
-          foreground: "#152959",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -81,37 +73,5 @@ const config: Config = {
       },
     },
   },
-  plugins: [
-    addVariablesForColors,
-    require("tailwindcss-animate"),
-    function ({ addUtilities }: { addUtilities: PluginCreator<object> }) {
-      const newUtilities = {
-        ".svg-black": {
-          filter:
-            "invert(0) sepia(100%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%)",
-        },
-      };
-
-      addUtilities(newUtilities);
-    },
-  ],
+  plugins: [require("tailwindcss-animate")],
 };
-
-function addVariablesForColors({
-  addBase,
-  theme,
-}: {
-  addBase: PluginCreator<object>;
-  theme: (path: string) => any;
-}) {
-  const allColors = flattenColorPalette(theme("colors"));
-  const newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
-  );
-
-  addBase({
-    ":root": newVars,
-  });
-}
-
-export default config;

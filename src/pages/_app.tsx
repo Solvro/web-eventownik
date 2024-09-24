@@ -11,6 +11,7 @@ import { z } from "zod";
 import { zodI18nMap } from "zod-i18n-map";
 import translation from "zod-i18n-map/locales/pl/zod.json";
 
+import { TooltipProvider } from "@/components/plate-ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { supabase } from "@/lib/supabase";
@@ -82,12 +83,18 @@ export default function App({ Component, pageProps }: AppProps) {
         <Head>
           <title>Eventownik</title>
         </Head>
-        <main className={spaceGrotesk.className}>
-          <Suspense fallback={null}>
-            <Component {...pageProps} />
-          </Suspense>
-          <Toaster />
-        </main>
+        <TooltipProvider
+          disableHoverableContent={true}
+          delayDuration={500}
+          skipDelayDuration={0}
+        >
+          <main className={spaceGrotesk.className}>
+            <Suspense fallback={null}>
+              <Component {...pageProps} />
+            </Suspense>
+            <Toaster />
+          </main>
+        </TooltipProvider>
       </ReactQueryClientProvider>
     </ThemeProvider>
   );
