@@ -10,7 +10,7 @@ export const useCreateEvent = () => {
         .from("events")
         .insert({
           name: new Date().toLocaleString(),
-          description: "",
+          description: "[]",
           organizerName: "",
           ownersSlug: v4(),
           participantsSlug: v4(),

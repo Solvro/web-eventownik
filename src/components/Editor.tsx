@@ -9,12 +9,14 @@ import {
 } from "@udecode/plate-basic-marks/react";
 import { ExitBreakPlugin, SoftBreakPlugin } from "@udecode/plate-break/react";
 import { CaptionPlugin } from "@udecode/plate-caption/react";
+import { type Value, createSlateEditor } from "@udecode/plate-common";
 import {
   ParagraphPlugin,
   Plate,
   PlateElement,
   PlateLeaf,
   createPlateEditor,
+  usePlateEditor,
 } from "@udecode/plate-common/react";
 import { CsvPlugin } from "@udecode/plate-csv";
 import { DatePlugin } from "@udecode/plate-date/react";
@@ -65,10 +67,11 @@ import { LinkFloatingToolbar } from "@/components/plate-ui/link-floating-toolbar
 import { ListElement } from "@/components/plate-ui/list-element";
 import { MediaEmbedElement } from "@/components/plate-ui/media-embed-element";
 import { ParagraphElement } from "@/components/plate-ui/paragraph-element";
-import { withPlaceholders } from "@/components/plate-ui/placeholder";
 import { withDraggables } from "@/components/plate-ui/with-draggables";
 
-const editor = createPlateEditor({
+import { autoformatRules } from "./plate-ui/autoformat-rules";
+
+const options = {
   plugins: [
     ParagraphPlugin,
     HeadingPlugin,
@@ -78,15 +81,11 @@ const editor = createPlateEditor({
     ListPlugin,
     ImagePlugin,
     MediaEmbedPlugin,
-    // TablePlugin,
     DatePlugin,
     BoldPlugin,
     ItalicPlugin,
     UnderlinePlugin,
     StrikethroughPlugin,
-    // FontColorPlugin,
-    // FontBackgroundColorPlugin,
-    // FontSizePlugin,
     HighlightPlugin,
     BaseAlignPlugin.configure({
       inject: { targetPlugins: ["p", "h1", "h2", "h3"] },
@@ -112,9 +111,7 @@ const editor = createPlateEditor({
     AutoformatPlugin.configure({
       options: {
         enableUndoOnDelete: true,
-        rules: [
-          // Usage: https://platejs.org/docs/autoformat
-        ],
+        rules: autoformatRules,
       },
     }),
     BlockSelectionPlugin,
@@ -177,42 +174,54 @@ const editor = createPlateEditor({
   ],
   override: {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    components: withDraggables(
-      withPlaceholders({
-        [ImagePlugin.key]: ImageElement,
-        [LinkPlugin.key]: LinkElement,
-        [HEADING_KEYS.h1]: withProps(HeadingElement, { variant: "h1" }),
-        [HEADING_KEYS.h2]: withProps(HeadingElement, { variant: "h2" }),
-        [HEADING_KEYS.h3]: withProps(HeadingElement, { variant: "h3" }),
-        [BulletedListPlugin.key]: withProps(ListElement, { variant: "ul" }),
-        [NumberedListPlugin.key]: withProps(ListElement, { variant: "ol" }),
-        [ListItemPlugin.key]: withProps(PlateElement, { as: "li" }),
-        [MediaEmbedPlugin.key]: MediaEmbedElement,
-        [ParagraphPlugin.key]: ParagraphElement,
-        // [TablePlugin.key]: TableElement,
-        // [TableRowPlugin.key]: TableRowElement,
-        // [TableCellPlugin.key]: TableCellElement,
-        // [TableCellHeaderPlugin.key]: TableCellHeaderElement,
-        [DatePlugin.key]: DateElement,
-        [BoldPlugin.key]: withProps(PlateLeaf, { as: "strong" }),
-        [HighlightPlugin.key]: HighlightLeaf,
-        [ItalicPlugin.key]: withProps(PlateLeaf, { as: "em" }),
-        [StrikethroughPlugin.key]: withProps(PlateLeaf, { as: "s" }),
-        [UnderlinePlugin.key]: withProps(PlateLeaf, { as: "u" }),
-      }),
-    ),
+    components: withDraggables({
+      [ImagePlugin.key]: ImageElement,
+      [LinkPlugin.key]: LinkElement,
+      [HEADING_KEYS.h1]: withProps(HeadingElement, { variant: "h1" }),
+      [HEADING_KEYS.h2]: withProps(HeadingElement, { variant: "h2" }),
+      [HEADING_KEYS.h3]: withProps(HeadingElement, { variant: "h3" }),
+      [BulletedListPlugin.key]: withProps(ListElement, { variant: "ul" }),
+      [NumberedListPlugin.key]: withProps(ListElement, { variant: "ol" }),
+      [ListItemPlugin.key]: withProps(PlateElement, { as: "li" }),
+      [MediaEmbedPlugin.key]: MediaEmbedElement,
+      [ParagraphPlugin.key]: ParagraphElement,
+      [DatePlugin.key]: DateElement,
+      [BoldPlugin.key]: withProps(PlateLeaf, { as: "strong" }),
+      [HighlightPlugin.key]: HighlightLeaf,
+      [ItalicPlugin.key]: withProps(PlateLeaf, { as: "em" }),
+      [StrikethroughPlugin.key]: withProps(PlateLeaf, { as: "s" }),
+      [UnderlinePlugin.key]: withProps(PlateLeaf, { as: "u" }),
+    }),
   },
-});
+};
 
-export function PlateEditor() {
+export function PlateEditor({
+  onChange,
+  value,
+}: {
+  onChange?: (value: Value) => void;
+  value?: Value;
+}) {
+  const editor2 = usePlateEditor({
+    value,
+    ...options,
+  });
+
   return (
     <DndProvider backend={HTML5Backend}>
-      <Plate editor={editor}>
+      <Plate
+        onValueChange={({ value: value2, editor }) => {
+          onChange?.(value2);
+
+          // console.log(editor.api.)
+        }}
+        editor={editor2}
+      >
         <FixedToolbar>
           <FixedToolbarButtons />
         </FixedToolbar>
 
-        <Editor  placeholder="Witamy na zapisach do Balu Inżyniera..." />
+        <Editor placeholder="Witamy na zapisach do Balu Inżyniera..." />
 
         <FloatingToolbar>
           <FloatingToolbarButtons />

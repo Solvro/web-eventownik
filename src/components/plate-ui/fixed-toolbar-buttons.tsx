@@ -63,7 +63,9 @@ export function FixedToolbarButtons() {
               <MarkToolbarButton nodeType={CodePlugin.key} tooltip="Code (⌘+E)">
                 <Icons.code />
               </MarkToolbarButton>
-              <MediaToolbarButton nodeType={ImagePlugin.key} />
+              <MediaToolbarButton nodeType={ImagePlugin.key}>
+                <Icons.image />
+              </MediaToolbarButton>
             </ToolbarGroup>
           </>
         )}
@@ -77,3 +79,4 @@ export function FixedToolbarButtons() {
     </div>
   );
 }
+/* eslint-enable react/jsx-pascal-case */

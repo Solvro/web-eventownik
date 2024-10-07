@@ -1,5 +1,6 @@
 import { CalendarIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { useMutation } from "@tanstack/react-query";
+import type { Value } from "@udecode/plate-common";
 import { format } from "date-fns";
 import type { InferGetServerSidePropsType } from "next";
 import { type GetServerSidePropsContext, route } from "nextjs-routes";
@@ -50,7 +51,7 @@ export default function Dashboard({
     schema: z.object({
       name: z.string().min(1),
       eventDate: z.date(),
-      description: z.string(),
+      description: z.array(z.unknown()),
       organizerName: z.string().min(1),
     }),
     reValidateMode: "onChange",
@@ -60,7 +61,7 @@ export default function Dashboard({
         typeof event.data?.eventDate === "string"
           ? new Date(event.data.eventDate)
           : undefined,
-      description: event.data?.description ?? "",
+      description: JSON.parse(event.data?.description ?? "[]") as Value,
       organizerName: event.data?.organizerName,
     },
   });
@@ -79,7 +80,7 @@ export default function Dashboard({
         typeof event.data?.eventDate === "string"
           ? new Date(event.data.eventDate)
           : undefined,
-      description: event.data?.description ?? "",
+      description: JSON.parse(event.data?.description ?? "[]") as Value,
       organizerName: event.data?.organizerName,
     });
   }, [event.data, form]);
@@ -109,8 +110,6 @@ export default function Dashboard({
         <TabsList>
           <TabsTrigger value="settings">Ogólne</TabsTrigger>
           <TabsTrigger value="sharing">Udostępnianie</TabsTrigger>
-          {/* <TabsTrigger value="customisation">Personalizacja</TabsTrigger> */}
-          {/* <TabsTrigger value="other">Inne</TabsTrigger> */}
         </TabsList>
         <TabsContent value="settings">
           <Form {...form}>
@@ -120,6 +119,7 @@ export default function Dashboard({
                 await updateEvent
                   .mutateAsync({
                     ...data,
+                    description: JSON.stringify(data.description),
                     eventDate: data.eventDate.toISOString(),
                   })
                   .then(() => {
@@ -213,7 +213,10 @@ export default function Dashboard({
                       <div className="grid w-full items-center gap-1.5">
                         <FormLabel htmlFor="description">Opis</FormLabel>
                         <FormControl>
-                          <PlateEditor />
+                          <PlateEditor
+                            value={field.value as Value}
+                            onChange={field.onChange}
+                          />
                         </FormControl>
                         <FormMessage />
                       </div>
@@ -336,58 +339,6 @@ export default function Dashboard({
                   Skopiuj
                 </Button>
               </div>
-            </div>
-            {/* <hr /> */}
-            {/* <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="email">Data i godz. otwarcia zapisów</Label>
-              <DateTimePicker />
-            </div>
-            <hr />
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="email">Data i godz. zamknięcia zapisów</Label>
-              <DateTimePicker />
-            </div>
-            <hr />
-            <div className="grid w-full max-w-sm items-center gap-5">
-              <Label htmlFor="people-limit-per-link">Limit osób na link</Label>
-              <Input
-                type="number"
-                id="people-limit-per-link"
-                placeholder="10"
-              />
-            </div>
-            <hr />
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="people-limit-per-sector">
-                Limit osób na sektor
-              </Label>
-              <Input
-                type="number"
-                id="people-limit-per-sector"
-                placeholder="2"
-              />
-            </div> */}
-          </div>
-        </TabsContent>
-        <TabsContent value="customisation">
-          <div className="mt-10 flex w-full max-w-screen-md flex-col gap-5">
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="default-color">Kolor domyślny</Label>
-              <Input id="default-color" type="color" />
-            </div>
-            <hr />
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="secondary-color">Kolor drugi</Label>
-              <Input id="secondary-color" type="color" />
-            </div>
-            <hr />
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="email">Tło wymiarów (???)</Label>
-              <Input type="text" placeholder="Co??" />
-            </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="info">Informacje</Label>
-              <Textarea id="info" />
             </div>
           </div>
         </TabsContent>
