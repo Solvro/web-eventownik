@@ -247,15 +247,6 @@ export function ReservationsTable({ blockId }: { blockId: string }) {
         <h1 className="text-2xl font-bold">Uczestnicy</h1>
         <div className="flex gap-2">
           <Button
-            variant="outline"
-            onClick={() => {
-              exportToCSV(reservations ?? [], blockId);
-            }}
-          >
-            Eksport
-            <FileText className="ml-2 h-4 w-4" />
-          </Button>
-          <Button
             onClick={() => {
               createReservation({ type: "create", blockId });
             }}
