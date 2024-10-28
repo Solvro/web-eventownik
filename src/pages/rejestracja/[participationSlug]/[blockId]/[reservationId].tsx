@@ -27,7 +27,17 @@ const Success = ({
       </div>
       <div className="mt-8 flex flex-col items-center gap-4">
         <CircleCheck strokeWidth={1.25} className="h-24 w-24 text-green-500" />
-
+        <div className="flex justify-center">
+          <div className="minimal-tiptap-editor">
+            <div
+              className="ProseMirror my-4"
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                __html: event.messageAfterRegistration ?? "",
+              }}
+            />
+          </div>
+        </div>
         <Card className="w-80">
           <CardHeader>
             <CardTitle>Zapisano!</CardTitle>
