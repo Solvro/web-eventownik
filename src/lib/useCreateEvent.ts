@@ -9,7 +9,7 @@ export const useCreateEvent = () => {
       const event = await supabase
         .from("events")
         .insert({
-          name: new Date().toLocaleString(),
+          name: `Nowe wydarzenie - ${new Date().toLocaleTimeString()}`,
           description: "",
           organizerName: "",
           ownersSlug: v4(),

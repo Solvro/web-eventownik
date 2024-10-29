@@ -162,7 +162,9 @@ export default function Dashboard({
                   render={({ field }) => (
                     <FormItem>
                       <div className="grid w-full max-w-sm items-center gap-1.5">
-                        <FormLabel htmlFor="date">Data</FormLabel>
+                        <FormLabel htmlFor="date">
+                          Data rozpoczęcia wydarzenia
+                        </FormLabel>
                         <FormControl>
                           <Popover>
                             <PopoverTrigger asChild={true}>
