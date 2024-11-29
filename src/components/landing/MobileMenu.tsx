@@ -1,5 +1,9 @@
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import type React from "react";
+
+import { useCreateEvent } from "@/lib/useCreateEvent";
 
 import { Button } from "../ui/button";
 import { Toggle } from "../ui/toggle";
@@ -10,6 +14,8 @@ interface MobileMenuProps {
 }
 
 export const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, isOpen }) => {
+  const event = useCreateEvent();
+  const router = useRouter();
   return isOpen ? (
     <>
       <button
@@ -60,10 +66,20 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, isOpen }) => {
           Kontakt
         </Link>
         <Button
+          onClick={() => {
+            void event.mutateAsync().then((data) => {
+              void router.push({
+                pathname: "/event/[slug]/settings",
+                query: { slug: data.ownersSlug },
+              });
+            });
+          }}
           variant="outline"
           className="mt-8 rounded-md border border-primary-foreground bg-transparent px-3 py-2"
-          onClick={onClose}
         >
+          {event.isPending || event.isSuccess ? (
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+          ) : null}
           Utwórz wydarzenie
         </Button>
       </div>
