@@ -1,11 +1,11 @@
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useCreateEvent } from "@/lib/useCreateEvent";
+import React, { useEffect, useState } from "react";
 
 import logo_eventownik from "@/assets/logo_eventownik.png";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import { useCreateEvent } from "@/lib/useCreateEvent";
 
 import { Button } from "../ui/button";
 import { Toggle } from "../ui/toggle";
@@ -67,18 +67,19 @@ export const Navbar = () => {
         </Link>
         <Button
           onClick={() => {
-                void event.mutateAsync().then((data) => {
-                  void router.push({
-                    pathname: "/event/[slug]/settings",
-                    query: { slug: data.ownersSlug },
-                  });
-                });
-              }}
+            void event.mutateAsync().then((data) => {
+              void router.push({
+                pathname: "/event/[slug]/settings",
+                query: { slug: data.ownersSlug },
+              });
+            });
+          }}
           variant="outline"
           className="ml-8 rounded-md border border-primary-foreground bg-transparent px-3 py-2"
-        >{event.isPending || event.isSuccess ? (
-                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
+        >
+          {event.isPending || event.isSuccess ? (
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+          ) : null}
           Utwórz wydarzenie
         </Button>
       </div>
