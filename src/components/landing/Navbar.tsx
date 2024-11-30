@@ -69,7 +69,10 @@ export const Navbar = () => {
       </div>
       {!isMobileMenuOpen && (
         <div className="mr-6 lg:hidden ">
-          <Toggle isOpen={isMobileMenuOpen} toggle={toggleMobileMenu} />
+          <Toggle
+            pressed={isMobileMenuOpen}
+            onPressedChange={toggleMobileMenu}
+          />
         </div>
       )}
       {isMobileMenuOpen ? (

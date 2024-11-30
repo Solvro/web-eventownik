@@ -96,23 +96,38 @@ export default function Building({
       <div className="w-full bg-blue-100 pb-4 pt-8 text-center text-xl font-medium">
         {event.data?.name}
       </div>
+
       <div className="w-full max-w-screen-sm">
-        <div className="mx-4 mt-4 flex h-10 items-center rounded bg-blue-200">
-          <div className=" flex-shrink-0 pl-2">
-            {typeof currentBlock !== "undefined" ? (
-              <button
-                onClick={() => {
-                  void setBlockId(parentId ?? null);
+        {typeof currentBlock === "undefined" ? (
+          <div className="flex justify-center">
+            <div className="minimal-tiptap-editor">
+              <div
+                className="ProseMirror mt-4"
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{
+                  __html: event.data?.description ?? "",
                 }}
-              >
-                <FaArrowLeft size={16} />
-              </button>
-            ) : (
-              <div className="w-4" />
-            )}
+              />
+            </div>
           </div>
-          <div className="flex-grow text-center">{currentBlock?.name}</div>
-        </div>
+        ) : (
+          <div className="mx-4 mt-4 flex h-10 items-center rounded bg-blue-200">
+            <div className=" flex-shrink-0 pl-2">
+              {typeof currentBlock !== "undefined" ? (
+                <button
+                  onClick={() => {
+                    void setBlockId(parentId ?? null);
+                  }}
+                >
+                  <FaArrowLeft size={16} />
+                </button>
+              ) : (
+                <div className="w-4" />
+              )}
+            </div>
+            <div className="flex-grow text-center">{currentBlock.name}</div>
+          </div>
+        )}
 
         <motion.div
           layout={true}

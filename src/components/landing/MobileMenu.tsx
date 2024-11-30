@@ -18,8 +18,8 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ onClose, isOpen }) => {
       />
       <div className="fixed inset-y-0 right-0 z-20 flex w-2/3 flex-col items-center justify-center bg-primary text-xl text-primary-foreground">
         <Toggle
-          isOpen={isOpen}
-          toggle={onClose}
+          pressed={isOpen}
+          onPressedChange={onClose}
           className="absolute right-6 top-8"
         />
 

@@ -13,8 +13,11 @@ import translation from "zod-i18n-map/locales/pl/zod.json";
 
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { supabase } from "@/lib/supabase";
 import "@/styles/globals.css";
+
+import "../components/minimal-tiptap/styles/index.css";
 
 setDefaultOptions({ locale: pl });
 
@@ -78,17 +81,19 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider>
-      <ReactQueryClientProvider>
-        <Head>
-          <title>Eventownik</title>
-        </Head>
-        <main className={spaceGrotesk.className}>
-          <Suspense fallback={null}>
-            <Component {...pageProps} />
-          </Suspense>
-          <Toaster />
-        </main>
-      </ReactQueryClientProvider>
+      <TooltipProvider>
+        <ReactQueryClientProvider>
+          <Head>
+            <title>Eventownik</title>
+          </Head>
+          <main className={spaceGrotesk.className}>
+            <Suspense fallback={null}>
+              <Component {...pageProps} />
+            </Suspense>
+            <Toaster />
+          </main>
+        </ReactQueryClientProvider>
+      </TooltipProvider>
     </ThemeProvider>
   );
 }
