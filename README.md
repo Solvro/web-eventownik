@@ -19,6 +19,8 @@ In developing this application, we used the following technologies:
 
 ## Links
 
+[![docs.solvro.pl](https://i.imgur.com/fuV0gra.png)](https://docs.solvro.pl)
+
 * [Landing page](https://eventownik.solvro.pl/)
 * [Figma](https://www.figma.com/design/WQW5P6ip5O7wycmwvFanUW/Eventownik---Main-Design?node-id=114-12150&t=81tGiOo09ZUwJfFj-0)
 
