@@ -91,14 +91,12 @@ export default function Dashboard({
     });
   }, [event.data, form]);
 
-  
   useEffect(() => {
     customisationForm.reset({
       description: event.data?.description ?? "",
       messageAfterRegistration: event.data?.messageAfterRegistration ?? "",
     });
   }, [event.data, customisationForm]);
-
 
   const updateEvent = useMutation({
     mutationFn: async (data: TablesUpdate<"events">) => {
