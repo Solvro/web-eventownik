@@ -68,8 +68,12 @@ export default function Building({
 
       return blocks.data;
     },
-  });
-
+    refetchOnWindowFocus: true, 
+    refetchOnReconnect: true,  
+    refetchOnMount: true,
+    refetchInterval: 1000
+  },
+);
   const currentBlocks = allBlocksQuery.data
     ?.filter((block) => block.parentBlockId === blockId)
     .slice()
