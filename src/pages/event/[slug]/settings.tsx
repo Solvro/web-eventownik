@@ -110,6 +110,7 @@ export default function Dashboard({
         <TabsList>
           <TabsTrigger value="settings">Ogólne</TabsTrigger>
           <TabsTrigger value="sharing">Udostępnianie</TabsTrigger>
+          <TabsTrigger value="customisation">Personalizacja</TabsTrigger>
         </TabsList>
         <TabsContent value="settings">
           <Form {...form}>
