@@ -49,8 +49,6 @@ export default function Dashboard({
     schema: z.object({
       name: z.string().min(1),
       eventDate: z.date(),
-      description: z.string(),
-      messageAfterRegistration: z.string(),
       organizerName: z.string().min(1),
     }),
     reValidateMode: "onChange",
@@ -60,8 +58,18 @@ export default function Dashboard({
         typeof event.data?.eventDate === "string"
           ? new Date(event.data.eventDate)
           : undefined,
-      description: event.data?.description ?? "",
       organizerName: event.data?.organizerName,
+    },
+  });
+
+  const customisationForm = useZodForm({
+    schema: z.object({
+      description: z.string(),
+      messageAfterRegistration: z.string(),
+    }),
+    reValidateMode: "onChange",
+    defaultValues: {
+      description: event.data?.description ?? "",
     },
   });
 
@@ -79,11 +87,18 @@ export default function Dashboard({
         typeof event.data?.eventDate === "string"
           ? new Date(event.data.eventDate)
           : undefined,
-      description: event.data?.description ?? "",
       organizerName: event.data?.organizerName,
-      messageAfterRegistration: event.data?.messageAfterRegistration ?? "",
     });
   }, [event.data, form]);
+
+  
+  useEffect(() => {
+    customisationForm.reset({
+      description: event.data?.description ?? "",
+      messageAfterRegistration: event.data?.messageAfterRegistration ?? "",
+    });
+  }, [event.data, customisationForm]);
+
 
   const updateEvent = useMutation({
     mutationFn: async (data: TablesUpdate<"events">) => {
@@ -353,10 +368,10 @@ export default function Dashboard({
           </div>
         </TabsContent>
         <TabsContent value="customisation">
-          <Form {...form}>
+          <Form {...customisationForm}>
             <form
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              onSubmit={form.handleSubmit(async (data) => {
+              onSubmit={customisationForm.handleSubmit(async (data) => {
                 await updateEvent
                   .mutateAsync({
                     ...data,
@@ -375,7 +390,7 @@ export default function Dashboard({
             >
               <div className="mt-10 flex w-full max-w-screen-md flex-col gap-5">
                 <FormField
-                  control={form.control}
+                  control={customisationForm.control}
                   name="description"
                   render={({ field }) => (
                     <FormItem>
@@ -399,7 +414,7 @@ export default function Dashboard({
                 />
 
                 <FormField
-                  control={form.control}
+                  control={customisationForm.control}
                   name="messageAfterRegistration"
                   render={({ field }) => (
                     <FormItem>
@@ -425,11 +440,11 @@ export default function Dashboard({
                 />
               </div>
               <Button
-                disabled={form.formState.isSubmitting}
+                disabled={customisationForm.formState.isSubmitting}
                 type="submit"
                 className="ml-auto mt-8 w-fit"
               >
-                {form.formState.isSubmitting ? (
+                {customisationForm.formState.isSubmitting ? (
                   <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                 ) : null}
                 Zapisz
