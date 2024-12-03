@@ -207,30 +207,6 @@ export default function Dashboard({
 
                 <FormField
                   control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
-                        <FormLabel htmlFor="description">Opis</FormLabel>
-                        <FormControl>
-                          <MinimalTiptapEditor
-                            className="w-full"
-                            editorContentClassName="p-5"
-                            output="html"
-                            placeholder="Bal inżyniera to wydarzenie, które odbywa się co roku w naszej uczelni. W tym roku mamy dla Was wiele niespodzianek!"
-                            editable={true}
-                            editorClassName="focus:outline-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
                   name="organizerName"
                   render={({ field }) => (
                     <FormItem>
@@ -242,31 +218,6 @@ export default function Dashboard({
                           <Input
                             id="organizer-name"
                             placeholder="KN Solvro"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="messageAfterRegistration"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
-                        <FormLabel htmlFor="description">
-                          Wiadomość po rejestracji
-                        </FormLabel>
-                        <FormControl>
-                          <MinimalTiptapEditor
-                            className="w-full"
-                            editorContentClassName="p-5"
-                            output="html"
-                            placeholder="Dzięki za zapisanie się!"
-                            editable={true}
-                            editorClassName="focus:outline-none"
                             {...field}
                           />
                         </FormControl>
@@ -400,6 +351,91 @@ export default function Dashboard({
               />
             </div> */}
           </div>
+        </TabsContent>
+        <TabsContent value="customisation">
+          <Form {...form}>
+            <form
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onSubmit={form.handleSubmit(async (data) => {
+                await updateEvent
+                  .mutateAsync({
+                    ...data,
+                  })
+                  .then(() => {
+                    toast("Zapisano zmiany");
+                  })
+                  .catch((err) => {
+                    if (err instanceof Error) {
+                      toast(`Coś poszło nie tak, ${err.message}`);
+                    } else {
+                      toast("Coś poszło nie tak, spróbuj ponownie");
+                    }
+                  });
+              })}
+            >
+              <div className="mt-10 flex w-full max-w-screen-md flex-col gap-5">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <FormLabel htmlFor="description">Opis</FormLabel>
+                        <FormControl>
+                          <MinimalTiptapEditor
+                            className="w-full"
+                            editorContentClassName="p-5"
+                            output="html"
+                            placeholder="Bal inżyniera to wydarzenie, które odbywa się co roku w naszej uczelni. W tym roku mamy dla Was wiele niespodzianek!"
+                            editable={true}
+                            editorClassName="focus:outline-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="messageAfterRegistration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <FormLabel htmlFor="description">
+                          Wiadomość po rejestracji
+                        </FormLabel>
+                        <FormControl>
+                          <MinimalTiptapEditor
+                            className="w-full"
+                            editorContentClassName="p-5"
+                            output="html"
+                            placeholder="Dzięki za zapisanie się!"
+                            editable={true}
+                            editorClassName="focus:outline-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button
+                disabled={form.formState.isSubmitting}
+                type="submit"
+                className="ml-auto mt-8 w-fit"
+              >
+                {form.formState.isSubmitting ? (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                Zapisz
+              </Button>
+            </form>
+          </Form>
         </TabsContent>
       </Tabs>
     </Layout>
