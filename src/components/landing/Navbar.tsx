@@ -1,14 +1,19 @@
+import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import logo_eventownik from "@/assets/logo_eventownik.png";
+import { useCreateEvent } from "@/lib/useCreateEvent";
 
 import { Button } from "../ui/button";
 import { Toggle } from "../ui/toggle";
 import { MobileMenu } from "./MobileMenu";
 
 export const Navbar = () => {
+  const event = useCreateEvent();
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -61,9 +66,20 @@ export const Navbar = () => {
           Kontakt
         </Link>
         <Button
+          onClick={() => {
+            void event.mutateAsync().then((data) => {
+              void router.push({
+                pathname: "/event/[slug]/settings",
+                query: { slug: data.ownersSlug },
+              });
+            });
+          }}
           variant="outline"
           className="ml-8 rounded-md border border-primary-foreground bg-transparent px-3 py-2"
         >
+          {event.isPending || event.isSuccess ? (
+            <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+          ) : null}
           Utwórz wydarzenie
         </Button>
       </div>
