@@ -181,53 +181,52 @@ const BlockDialog = ({
 const DeleteDialog = ({
   children,
   blockId,
-  onDelete
+  onDelete,
 }: {
   children: ReactNode;
   onDelete?: () => Promise<void> | void;
   blockId: string;
 }) => {
-	const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const deleteBlock = useMutation({
     mutationFn: async () => {
       const block = supabase.from("blocks");
 
-      return block.delete().eq("blockId", blockId)
+      return block.delete().eq("blockId", blockId);
     },
   });
 
-	return (
-		<Dialog open={isOpen} onOpenChange={setIsOpen}>
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild={true}>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>
-            Usuń
-          </DialogTitle>
+          <DialogTitle>Usuń</DialogTitle>
         </DialogHeader>
         <p>Czy na pewno chcesz usunąć sekcje?</p>
         <DialogFooter>
-          <Button onClick=
-            {async () => 
-              await deleteBlock
+          <Button
+            onClick={() => {
+              deleteBlock
                 .mutateAsync()
-                .then(() => {
-                  onDelete?.()
+                .then(async () => {
+                  await onDelete?.();
                   setIsOpen(false);
                   toast("Usunięto sekcję");
-                }).catch(() => {
+                })
+                .catch(() => {
                   setIsOpen(false);
                   toast("Nie udało się usunąć sekcji");
-                })
-            }
+                });
+            }}
           >
             Usuń sekcje
           </Button>
         </DialogFooter>
       </DialogContent>
-		</Dialog>
-	)
+    </Dialog>
+  );
 };
 
 type Block = Tables<"blocks">;
@@ -376,7 +375,7 @@ const Preview = ({
                 blockId={blockId}
                 onDelete={async () => {
                   await allBlocksQuery.refetch(); //na odwrót setBlockId i refetch, aby uniknąć mignięcia usuwanego blocku
-                  setBlockId(parentId ? parentId : null)
+                  await setBlockId(parentId ?? null);
                 }}
               >
                 <Button variant="ghost">Usuń</Button>
