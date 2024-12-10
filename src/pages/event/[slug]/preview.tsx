@@ -178,6 +178,57 @@ const BlockDialog = ({
   );
 };
 
+const DeleteDialog = ({
+  children,
+  blockId,
+  onDelete,
+}: {
+  children: ReactNode;
+  onDelete?: () => Promise<void> | void;
+  blockId: string;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const deleteBlock = useMutation({
+    mutationFn: async () => {
+      const block = supabase.from("blocks");
+
+      return block.delete().eq("blockId", blockId);
+    },
+  });
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild={true}>{children}</DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Usuń</DialogTitle>
+        </DialogHeader>
+        <p>Czy na pewno chcesz usunąć sekcje?</p>
+        <DialogFooter>
+          <Button
+            onClick={() => {
+              deleteBlock
+                .mutateAsync()
+                .then(async () => {
+                  await onDelete?.();
+                  setIsOpen(false);
+                  toast("Usunięto sekcję");
+                })
+                .catch(() => {
+                  setIsOpen(false);
+                  toast("Nie udało się usunąć sekcji");
+                });
+            }}
+          >
+            Usuń sekcje
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 type Block = Tables<"blocks">;
 
 function buildBreadcrumbs(blocks: Block[], currentBlockId: string) {
@@ -320,7 +371,15 @@ const Preview = ({
                 <Button variant="ghost">Edytuj</Button>
               </BlockDialog>
 
-              <Button variant="ghost">Usuń</Button>
+              <DeleteDialog
+                blockId={blockId}
+                onDelete={async () => {
+                  await allBlocksQuery.refetch(); //na odwrót setBlockId i refetch, aby uniknąć mignięcia usuwanego blocku
+                  await setBlockId(parentId ?? null);
+                }}
+              >
+                <Button variant="ghost">Usuń</Button>
+              </DeleteDialog>
             </div>
           </>
         ) : null}
