@@ -14,32 +14,8 @@ import { Button } from "@/components/ui/button";
 import { DeleteDialog } from "@/components/ui/delete-dialog";
 import { supabase } from "@/lib/supabase";
 import { createSSRClient } from "@/lib/supabaseSSR";
-import type { Tables } from "@/lib/types";
 import { useEvent } from "@/lib/useEvent";
-import { cn } from "@/lib/utils";
-
-type Block = Tables<"blocks">;
-
-function buildBreadcrumbs(blocks: Block[], currentBlockId: string) {
-  const blockMap: { [key: string]: Block } = {};
-  blocks.forEach((block) => {
-    blockMap[block.blockId] = block;
-  });
-
-  const breadcrumbs: Block[] = [];
-  let currentBlock: Block | undefined = blockMap[currentBlockId];
-
-  while (currentBlock) {
-    breadcrumbs.unshift(currentBlock);
-    if (currentBlock.parentBlockId !== null) {
-      currentBlock = blockMap[currentBlock.parentBlockId];
-    } else {
-      currentBlock = undefined;
-    }
-  }
-
-  return breadcrumbs;
-}
+import { buildBreadcrumbs, cn } from "@/lib/utils";
 
 const Preview = ({
   ownersSlug,
