@@ -1,21 +1,17 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { useQuery } from "@tanstack/react-query";
 import type { InferGetServerSidePropsType } from "next";
 import type { GetServerSidePropsContext } from "nextjs-routes";
 import { parseAsString, useQueryState } from "nuqs";
-import { type ReactNode } from "react";
 import { z } from "zod";
 
 import { BlockCard } from "@/components/Block";
 import { ReservationsTable } from "@/components/ContactTable";
 import { Layout } from "@/components/Layout";
+import { PreviewTopBar } from "@/components/preview-top-bar";
 import { BlockDialog } from "@/components/ui/block-dialog";
-import { Button } from "@/components/ui/button";
-import { DeleteDialog } from "@/components/ui/delete-dialog";
 import { supabase } from "@/lib/supabase";
 import { createSSRClient } from "@/lib/supabaseSSR";
 import { useEvent } from "@/lib/useEvent";
-import { buildBreadcrumbs, cn } from "@/lib/utils";
 
 const Preview = ({
   ownersSlug,
@@ -33,7 +29,7 @@ const Preview = ({
     parseAsString.withOptions({ history: "push" }),
   );
 
-  const allBlocksQuery = useQuery({
+  const { data: allBlocks, refetch: refetchAllBlocks } = useQuery({
     queryKey: ["blocks", eventId],
     queryFn: async () => {
       const blocks = await supabase
@@ -45,110 +41,23 @@ const Preview = ({
     },
   });
 
-  const currentBlocks = allBlocksQuery.data
+  const currentBlocks = allBlocks
     ?.filter((block) => block.parentBlockId === blockId)
     .slice()
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  const breadcrumbs =
-    typeof blockId === "string"
-      ? buildBreadcrumbs(allBlocksQuery.data ?? [], blockId)
-      : null;
-
-  const currentBlock = allBlocksQuery.data?.find(
-    (block) => block.blockId === blockId,
-  );
-
-  const parentId = breadcrumbs?.[breadcrumbs.length - 2]?.blockId;
+  const currentBlock = allBlocks?.find((block) => block.blockId === blockId);
 
   return (
     <Layout ownersSlug={ownersSlug}>
-      <div
-        className={cn(
-          "flex h-14 items-center gap-4 rounded-sm border  p-4 py-8",
-          blockId === null && "pointer-events-none opacity-0",
-        )}
-      >
-        {typeof blockId === "string" ? (
-          <>
-            <Button
-              onClick={() => {
-                void setBlockId(parentId ?? null);
-              }}
-              variant="outline"
-              size="icon"
-              className="mr-4"
-            >
-              <ChevronLeftIcon className="h-4 w-4" />
-            </Button>
-            <ol className="flex items-center gap-2">
-              {breadcrumbs
-                ?.slice(-4)
-                .map((breadcrumb, index) => (
-                  <button
-                    key={index}
-                    className={cn(
-                      index === breadcrumbs.length - 1
-                        ? "cursor-default font-bold"
-                        : "text-gray-500 hover:text-gray-900",
-                    )}
-                    onClick={() => {
-                      void setBlockId(breadcrumb.blockId);
-                    }}
-                  >
-                    {breadcrumb.name}
-                  </button>
-                ))
-                .reduce<ReactNode[]>((acc, el, i) => {
-                  if (i === 0) {
-                    return [...acc, el];
-                  }
-                  return [
-                    ...acc,
-                    <ChevronRightIcon key={i} className="mt-1 h-4 w-4" />,
-                    el,
-                  ];
-                }, [])}
-            </ol>
-
-            <div className="ml-auto flex gap-4">
-              <Button
-                variant="ghost"
-                onClick={() =>
-                  window.open(
-                    `https://kmiyeqcynkremenbffvl.supabase.co/functions/v1/generate_excel?section_uuid=${blockId}`,
-                  )
-                }
-              >
-                Export
-              </Button>
-              <BlockDialog
-                eventId={eventId}
-                blockId={blockId}
-                defaultValues={{
-                  name: currentBlock?.name,
-                  capacity: currentBlock?.capacity ?? undefined,
-                }}
-                onSubmit={async () => {
-                  await allBlocksQuery.refetch();
-                }}
-              >
-                <Button variant="ghost">Edytuj</Button>
-              </BlockDialog>
-
-              <DeleteDialog
-                blockId={blockId}
-                onDelete={async () => {
-                  await allBlocksQuery.refetch(); //na odwrót setBlockId i refetch, aby uniknąć mignięcia usuwanego blocku
-                  await setBlockId(parentId ?? null);
-                }}
-              >
-                <Button variant="ghost">Usuń</Button>
-              </DeleteDialog>
-            </div>
-          </>
-        ) : null}
-      </div>
+      <PreviewTopBar
+        eventId={eventId}
+        blockId={blockId}
+        setBlockId={setBlockId}
+        allBlocks={allBlocks}
+        currentBlock={currentBlock}
+        refetchAllBlocks={refetchAllBlocks}
+      />
       <div className="flex w-full flex-wrap items-start gap-4">
         {typeof currentBlock?.capacity !== "number" ||
         typeof blockId !== "string" ? (
@@ -156,7 +65,7 @@ const Preview = ({
             eventId={eventId}
             parentBlockId={blockId ?? undefined}
             onSubmit={async () => {
-              await allBlocksQuery.refetch();
+              await refetchAllBlocks();
             }}
           >
             <button className="flex h-72 w-72 border-spacing-1 items-center justify-center rounded-md border border-dashed border-[#71717A] transition-all hover:scale-[1.02] hover:bg-slate-50 hover:shadow-md">
