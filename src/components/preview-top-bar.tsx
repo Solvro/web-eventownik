@@ -13,6 +13,7 @@ import type { Block } from "@/types/Block";
 
 interface PreviewTopBarProps {
   eventId: string;
+  eventName: string;
   blockId: string | null;
   setBlockId: (blockId: string | null) => Promise<URLSearchParams>;
   allBlocks: Block[] | null | undefined;
@@ -24,6 +25,7 @@ interface PreviewTopBarProps {
 
 export function PreviewTopBar({
   eventId,
+  eventName,
   blockId,
   setBlockId,
   allBlocks,
@@ -38,12 +40,7 @@ export function PreviewTopBar({
   const parentId = breadcrumbs?.[breadcrumbs.length - 2]?.blockId;
 
   return (
-    <div
-      className={cn(
-        "flex h-14 items-center gap-4 rounded-sm border  p-4 py-8",
-        blockId === null && "pointer-events-none opacity-0",
-      )}
-    >
+    <div className="flex h-14 items-center gap-4 rounded-sm border p-4 py-8">
       {typeof blockId === "string" ? (
         <>
           <Button
@@ -122,7 +119,9 @@ export function PreviewTopBar({
             </DeleteDialog>
           </div>
         </>
-      ) : null}
+      ) : (
+        <span className="font-bold">{eventName}</span>
+      )}
     </div>
   );
 }
