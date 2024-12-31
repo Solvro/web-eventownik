@@ -55,6 +55,7 @@ const Preview = ({
         setBlockId={setBlockId}
         allBlocks={allBlocks}
         currentBlock={currentBlock}
+        currentBlocks={currentBlocks}
         refetchAllBlocks={refetchAllBlocks}
       />
       <PreviewBody

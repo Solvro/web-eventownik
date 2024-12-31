@@ -10,14 +10,16 @@ import { Button } from "@/components/ui/button";
 import { DeleteDialog } from "@/components/ui/delete-dialog";
 import { buildBreadcrumbs, cn } from "@/lib/utils";
 import type { Block } from "@/types/Block";
+import type { BlockWithReservations } from "@/types/block-with-reservations";
 
 interface PreviewTopBarProps {
   eventId: string;
   eventName: string;
   blockId: string | null;
   setBlockId: (blockId: string | null) => Promise<URLSearchParams>;
-  allBlocks: Block[] | null | undefined;
-  currentBlock: Block | undefined;
+  allBlocks: BlockWithReservations[] | null | undefined;
+  currentBlock: BlockWithReservations | undefined;
+  currentBlocks: BlockWithReservations[] | undefined;
   refetchAllBlocks: (
     options?: RefetchOptions,
   ) => Promise<QueryObserverResult<Block[] | null>>;
@@ -30,6 +32,7 @@ export function PreviewTopBar({
   setBlockId,
   allBlocks,
   currentBlock,
+  currentBlocks,
   refetchAllBlocks,
 }: PreviewTopBarProps): ReactNode {
   const breadcrumbs =
@@ -38,6 +41,21 @@ export function PreviewTopBar({
       : null;
 
   const parentId = breadcrumbs?.[breadcrumbs.length - 2]?.blockId;
+
+  const { totalCapacity, reservedSpotsCount } =
+    (typeof currentBlock?.capacity !== "number"
+      ? (blockId === null ? allBlocks : currentBlocks)?.reduce(
+          (totals, block) => {
+            totals.totalCapacity += block.capacity ?? 0;
+            totals.reservedSpotsCount += block.reservations.length;
+            return totals;
+          },
+          { totalCapacity: 0, reservedSpotsCount: 0 },
+        )
+      : {
+          totalCapacity: currentBlock.capacity,
+          reservedSpotsCount: currentBlock.reservations.length,
+        }) ?? { totalCapacity: 0, reservedSpotsCount: 0 };
 
   return (
     <div className="flex h-14 items-center gap-4 rounded-sm border p-4 py-8">
@@ -83,7 +101,11 @@ export function PreviewTopBar({
               }, [])}
           </ol>
 
-          <div className="ml-auto flex gap-4">
+          <div className="ml-auto flex items-center gap-4">
+            <span>
+              Ilość wolnych miejsc: {reservedSpotsCount}/{totalCapacity}
+            </span>
+
             <Button
               variant="ghost"
               onClick={() =>
@@ -123,6 +145,10 @@ export function PreviewTopBar({
         <>
           <span className="font-bold">{eventName}</span>
           <div className="ml-auto flex items-center gap-4">
+            <span>
+              Ilość wolnych miejsc: {reservedSpotsCount}/{totalCapacity}
+            </span>
+
             <Button
               variant="ghost"
               onClick={() =>
