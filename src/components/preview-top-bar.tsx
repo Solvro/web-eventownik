@@ -120,7 +120,21 @@ export function PreviewTopBar({
           </div>
         </>
       ) : (
-        <span className="font-bold">{eventName}</span>
+        <>
+          <span className="font-bold">{eventName}</span>
+          <div className="ml-auto flex items-center gap-4">
+            <Button
+              variant="ghost"
+              onClick={() =>
+                window.open(
+                  `https://kmiyeqcynkremenbffvl.supabase.co/functions/v1/generate_event_excel?eventId=${eventId}`,
+                )
+              }
+            >
+              Export
+            </Button>
+          </div>
+        </>
       )}
     </div>
   );
