@@ -33,7 +33,7 @@ export const AboutUs = () => {
             </h2>
             <p className="mb-8">
               Koło Naukowe Solvro działa na Politechnice Wrocławskiej od wielu
-              lat. Wielu nazwywa nas Politechnicznym
+              lat. Wielu nazywa nas Politechnicznym
               <br /> Softwarehousem, no bo w sumie nim jesteśmy. W Solvro
               działamy na wielu frontach, eksplorując dzikie zakamarki
               <br /> kodu i tworząc innowacyjne projekty. Funkcjonujemy jak
