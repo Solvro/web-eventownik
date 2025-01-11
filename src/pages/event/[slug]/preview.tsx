@@ -20,7 +20,7 @@ const Preview = ({
     ...rest,
   });
 
-  const eventId = event.data?.eventId ?? rest.eventId;
+  const { eventId, name: eventName } = event.data ?? rest;
 
   const [blockId, setBlockId] = useQueryState(
     "blockId",
@@ -50,10 +50,12 @@ const Preview = ({
     <Layout ownersSlug={ownersSlug}>
       <PreviewTopBar
         eventId={eventId}
+        eventName={eventName}
         blockId={blockId}
         setBlockId={setBlockId}
         allBlocks={allBlocks}
         currentBlock={currentBlock}
+        currentBlocks={currentBlocks}
         refetchAllBlocks={refetchAllBlocks}
       />
       <PreviewBody
