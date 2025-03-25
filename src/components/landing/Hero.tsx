@@ -1,21 +1,14 @@
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import React from "react";
 
 import cube from "@/assets/cube.png";
 import visionImage from "@/assets/landing_vision.png";
 import sphere from "@/assets/sphere.png";
-import { Button } from "@/components/ui/button";
-import { useCreateEvent } from "@/lib/useCreateEvent";
 
 import { MacbookScroll } from "../ui/macbook-scroll";
 
 export const Hero = () => {
-  const event = useCreateEvent();
-  const router = useRouter();
-
   return (
     <section>
       <div className="mt-8 flex flex-col p-12 pb-0 md:flex-row  md:justify-between xl:mt-24 ">
@@ -26,24 +19,6 @@ export const Hero = () => {
               <br />
               wydarzenie!
             </h1>
-            <Button
-              onClick={() => {
-                void event.mutateAsync().then((data) => {
-                  void router.push({
-                    pathname: "/event/[slug]/settings",
-                    query: { slug: data.ownersSlug },
-                  });
-                });
-              }}
-              variant="secondary"
-              disabled={event.isPending || event.isSuccess}
-              className="rounded-md bg-secondary px-8 py-8 text-lg font-bold"
-            >
-              {event.isPending || event.isSuccess ? (
-                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              ) : null}
-              Utwórz wydarzenie
-            </Button>
           </div>
         </div>
         <div>
