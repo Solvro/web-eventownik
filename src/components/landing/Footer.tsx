@@ -29,6 +29,7 @@ export const Footer = () => {
           <h3 className="mb-2 uppercase">Obserwuj nas</h3>
           <a
             href="https://github.com/Solvro/web-eventownik"
+            target="_blank"
             className={cn(
               buttonVariants({ variant: "secondary" }),
               "mx-2 cursor-pointer rounded-full bg-[#152959] p-2 hover:bg-[#274276]",
@@ -38,6 +39,7 @@ export const Footer = () => {
           </a>
           <a
             href="https://www.facebook.com/knsolvro"
+            target="_blank"
             className={cn(
               buttonVariants({ variant: "secondary" }),
               "mx-2 cursor-pointer rounded-full bg-[#152959] p-2 hover:bg-[#274276]",
@@ -47,6 +49,7 @@ export const Footer = () => {
           </a>
           <a
             href="https://www.linkedin.com/company/knsolvro/"
+            target="_blank"
             className={cn(
               buttonVariants({ variant: "secondary" }),
               "mx-2 cursor-pointer rounded-full bg-[#152959] p-2 hover:bg-[#274276]",
