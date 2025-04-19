@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 import { Layout } from "@/components/Layout";
+import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -27,7 +28,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/lib/supabase";
 import { createSSRClient } from "@/lib/supabaseSSR";
 import type { TablesUpdate } from "@/lib/types";
@@ -49,7 +49,6 @@ export default function Dashboard({
     schema: z.object({
       name: z.string().min(1),
       eventDate: z.date(),
-      description: z.string(),
       organizerName: z.string().min(1),
     }),
     reValidateMode: "onChange",
@@ -59,8 +58,18 @@ export default function Dashboard({
         typeof event.data?.eventDate === "string"
           ? new Date(event.data.eventDate)
           : undefined,
-      description: event.data?.description ?? "",
       organizerName: event.data?.organizerName,
+    },
+  });
+
+  const customisationForm = useZodForm({
+    schema: z.object({
+      description: z.string(),
+      messageAfterRegistration: z.string(),
+    }),
+    reValidateMode: "onChange",
+    defaultValues: {
+      description: event.data?.description ?? "",
     },
   });
 
@@ -78,10 +87,16 @@ export default function Dashboard({
         typeof event.data?.eventDate === "string"
           ? new Date(event.data.eventDate)
           : undefined,
-      description: event.data?.description ?? "",
       organizerName: event.data?.organizerName,
     });
   }, [event.data, form]);
+
+  useEffect(() => {
+    customisationForm.reset({
+      description: event.data?.description ?? "",
+      messageAfterRegistration: event.data?.messageAfterRegistration ?? "",
+    });
+  }, [event.data, customisationForm]);
 
   const updateEvent = useMutation({
     mutationFn: async (data: TablesUpdate<"events">) => {
@@ -108,8 +123,7 @@ export default function Dashboard({
         <TabsList>
           <TabsTrigger value="settings">Ogólne</TabsTrigger>
           <TabsTrigger value="sharing">Udostępnianie</TabsTrigger>
-          {/* <TabsTrigger value="customisation">Personalizacja</TabsTrigger> */}
-          {/* <TabsTrigger value="other">Inne</TabsTrigger> */}
+          <TabsTrigger value="customisation">Personalizacja</TabsTrigger>
         </TabsList>
         <TabsContent value="settings">
           <Form {...form}>
@@ -156,14 +170,15 @@ export default function Dashboard({
                   )}
                 />
 
-                <hr />
                 <FormField
                   control={form.control}
                   name="eventDate"
                   render={({ field }) => (
                     <FormItem>
                       <div className="grid w-full max-w-sm items-center gap-1.5">
-                        <FormLabel htmlFor="date">Data</FormLabel>
+                        <FormLabel htmlFor="date">
+                          Data rozpoczęcia wydarzenia
+                        </FormLabel>
                         <FormControl>
                           <Popover>
                             <PopoverTrigger asChild={true}>
@@ -203,28 +218,6 @@ export default function Dashboard({
                   )}
                 />
 
-                <hr />
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
-                        <FormLabel htmlFor="description">Opis</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            id="description"
-                            {...field}
-                            placeholder="Bal inżyniera już 15.06! Zapraszamy do zapisywania się na wybrane miejsca :)"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-
-                <hr />
                 <FormField
                   control={form.control}
                   name="organizerName"
@@ -373,26 +366,89 @@ export default function Dashboard({
           </div>
         </TabsContent>
         <TabsContent value="customisation">
-          <div className="mt-10 flex w-full max-w-screen-md flex-col gap-5">
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="default-color">Kolor domyślny</Label>
-              <Input id="default-color" type="color" />
-            </div>
-            <hr />
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="secondary-color">Kolor drugi</Label>
-              <Input id="secondary-color" type="color" />
-            </div>
-            <hr />
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="email">Tło wymiarów (???)</Label>
-              <Input type="text" placeholder="Co??" />
-            </div>
-            <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="info">Informacje</Label>
-              <Textarea id="info" />
-            </div>
-          </div>
+          <Form {...customisationForm}>
+            <form
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onSubmit={customisationForm.handleSubmit(async (data) => {
+                await updateEvent
+                  .mutateAsync({
+                    ...data,
+                  })
+                  .then(() => {
+                    toast("Zapisano zmiany");
+                  })
+                  .catch((err) => {
+                    if (err instanceof Error) {
+                      toast(`Coś poszło nie tak, ${err.message}`);
+                    } else {
+                      toast("Coś poszło nie tak, spróbuj ponownie");
+                    }
+                  });
+              })}
+            >
+              <div className="mt-10 flex w-full max-w-screen-md flex-col gap-5">
+                <FormField
+                  control={customisationForm.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <FormLabel htmlFor="description">Opis</FormLabel>
+                        <FormControl>
+                          <MinimalTiptapEditor
+                            className="w-full"
+                            editorContentClassName="p-5"
+                            output="html"
+                            placeholder="Bal inżyniera to wydarzenie, które odbywa się co roku w naszej uczelni. W tym roku mamy dla Was wiele niespodzianek!"
+                            editable={true}
+                            editorClassName="focus:outline-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={customisationForm.control}
+                  name="messageAfterRegistration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <FormLabel htmlFor="description">
+                          Wiadomość po rejestracji
+                        </FormLabel>
+                        <FormControl>
+                          <MinimalTiptapEditor
+                            className="w-full"
+                            editorContentClassName="p-5"
+                            output="html"
+                            placeholder="Dzięki za zapisanie się!"
+                            editable={true}
+                            editorClassName="focus:outline-none"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button
+                disabled={customisationForm.formState.isSubmitting}
+                type="submit"
+                className="ml-auto mt-8 w-fit"
+              >
+                {customisationForm.formState.isSubmitting ? (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                ) : null}
+                Zapisz
+              </Button>
+            </form>
+          </Form>
         </TabsContent>
       </Tabs>
     </Layout>

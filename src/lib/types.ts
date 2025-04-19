@@ -57,12 +57,12 @@ export type Database = {
       events: {
         Row: {
           closingRegistrationAt: string | null;
-          content: Json | null;
           createdAt: string;
           description: string | null;
-          displayOnEverySection: boolean | null;
+          displayDescriptionOnEverySection: boolean | null;
           eventDate: string | null;
           eventId: string;
+          messageAfterRegistration: string | null;
           name: string;
           openingRegistrationAt: string | null;
           organizerName: string;
@@ -73,12 +73,12 @@ export type Database = {
         };
         Insert: {
           closingRegistrationAt?: string | null;
-          content?: Json | null;
           createdAt?: string;
           description?: string | null;
-          displayOnEverySection?: boolean | null;
+          displayDescriptionOnEverySection?: boolean | null;
           eventDate?: string | null;
           eventId?: string;
+          messageAfterRegistration?: string | null;
           name: string;
           openingRegistrationAt?: string | null;
           organizerName: string;
@@ -89,12 +89,12 @@ export type Database = {
         };
         Update: {
           closingRegistrationAt?: string | null;
-          content?: Json | null;
           createdAt?: string;
           description?: string | null;
-          displayOnEverySection?: boolean | null;
+          displayDescriptionOnEverySection?: boolean | null;
           eventDate?: string | null;
           eventId?: string;
+          messageAfterRegistration?: string | null;
           name?: string;
           openingRegistrationAt?: string | null;
           organizerName?: string;
@@ -103,15 +103,7 @@ export type Database = {
           participantsSlug?: string;
           updatedAt?: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: "events_ownerUUID_fkey";
-            columns: ["ownerUUID"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          },
-        ];
+        Relationships: [];
       };
       reservations: {
         Row: {
@@ -151,6 +143,41 @@ export type Database = {
           },
         ];
       };
+      user_attributes: {
+        Row: {
+          createdAt: string;
+          eventId: string;
+          isMandatory: boolean;
+          name: string;
+          updatedAt: string;
+          userAttributeId: string;
+        };
+        Insert: {
+          createdAt?: string;
+          eventId: string;
+          isMandatory: boolean;
+          name: string;
+          updatedAt?: string;
+          userAttributeId?: string;
+        };
+        Update: {
+          createdAt?: string;
+          eventId?: string;
+          isMandatory?: boolean;
+          name?: string;
+          updatedAt?: string;
+          userAttributeId?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_attributes_eventId_fkey";
+            columns: ["eventId"];
+            isOneToOne: false;
+            referencedRelation: "events";
+            referencedColumns: ["eventId"];
+          },
+        ];
+      };
     };
     Views: {
       [_ in never]: never;
@@ -161,6 +188,18 @@ export type Database = {
           event_name: string;
         };
         Returns: string;
+      };
+      get_reservations_by_event: {
+        Args: {
+          event_id: string;
+        };
+        Returns: {
+          imie: string;
+          nazwisko: string;
+          data_dodania: string;
+          sekcja_koncowa: string;
+          drzewko_sekcji: string;
+        }[];
       };
       get_section_data: {
         Args: {
@@ -265,4 +304,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never;
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database;
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never;
